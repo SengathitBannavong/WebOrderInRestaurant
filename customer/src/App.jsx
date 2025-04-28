@@ -1,4 +1,3 @@
-import './App.css';
 import { ToastContainer } from "react-toastify";
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar/navbar.jsx';
@@ -21,6 +20,9 @@ function App() {
           <Route path="/myorders" element={<MyOrders/>} />
         </Routes>
       </div>
+      <Footer />
     </>
   );
 }
+
+export default App;

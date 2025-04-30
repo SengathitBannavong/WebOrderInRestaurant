@@ -1,35 +1,118 @@
-.place-order{
+.place-order {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 50px;
     margin-top: 100px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    flex-wrap: wrap;
 }
-.place-order-left{
+
+.place-order-left {
     width: 100%;
-    max-width: max(30%,500px);
+    max-width: max(30%, 500px);
 }
-.place-order-left .title{
+
+.place-order-left .title {
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 50px;
+    color: #333;
 }
-.place-order-left input{
+
+.place-order-left input,
+.place-order-left select {
     margin-bottom: 15px;
     width: 100%;
     padding: 10px;
     border: 1px solid #c5c5c5;
-    border-radius: 4px;
+    border-radius: 6px;
     outline-color: tomato;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
 }
-.place-order-left .multi-fields{
+
+.place-order-left input:focus,
+.place-order-left select:focus {
+    border-color: tomato;
+}
+
+/* radio group */
+.radio-group {
     display: flex;
-    gap: 10px;
+    gap: 20px;
+    margin-bottom: 20px;
 }
-.place-order-right{
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ececec;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.radio-group label:hover {
+    background-color: #ddd;
+}
+
+.radio-group input[type='radio'] {
+    accent-color: tomato;
+}
+
+/* table selector */
+.table-number-selector p {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+.place-order-right {
     width: 100%;
-    max-width: max(40%,500px);
+    max-width: max(40%, 500px);
 }
-.place-order .cart-total button{
+
+.place-order .cart-total {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+}
+
+.place-order .cart-total button {
     margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: tomato;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.place-order .cart-total button:hover {
+    background-color: #e05239;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+    .place-order {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .place-order-left,
+    .place-order-right {
+        max-width: 100%;
+    }
 }

@@ -13,16 +13,6 @@ const CartDetail = ({ cart = [] }) => {
 
     return (
         <div className="cart-detail-container">
-            <div className="cart-items">
-                {/* Cart items would be rendered here */}
-                {cart.length === 0 && <p>Your cart is empty</p>}
-                {cart.map((item, index) => (
-                    <div key={index} className="cart-item">
-                        {/* Item details would go here */}
-                    </div>
-                ))}
-            </div>
-            
             {/* This div is show total prices of order */}
             <div className='cart-total'>
                 <h2>Cart Totals</h2>

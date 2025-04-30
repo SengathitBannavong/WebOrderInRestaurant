@@ -1,9 +1,15 @@
 import React from 'react';
-import './cart.css';
 import { useNavigate } from 'react-router-dom';
-
+import CartDetail from '../../components/Cart/Cart_Detail';
+import './cart.css';
 const Cart = () => {
     const navigate = useNavigate();
+
+    // simple data
+    const cartItems = [
+        {id:1, name: 'Product 1', price: 10, quantity: 2},
+        {id:2, name: 'Product 2', price: 20, quantity: 1}
+    ];
     
     return (
     <div className='cart'>
@@ -24,23 +30,7 @@ const Cart = () => {
         <div className='cart-bottom'>
             {/* This div is show total prices of order */}
             <div className='cart-total'>
-                <h2>Cart Totals</h2>
-                <div>
-                    <div className="cart-total-details">
-                        <p>Subtotal</p>
-                        <p>0</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <p>Delivery Fee</p>
-                        <p>0</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <b>Total</b>
-                        <b>0</b>
-                    </div>
-                </div>
+                <CartDetail cart={cartItems} />
                 <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
             </div>
             {/* This div is show promo code to enter but currents still dont have function to handle */}

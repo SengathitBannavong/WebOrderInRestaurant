@@ -14,6 +14,9 @@ import main_logo from './logo.png';
 import pizza from './food_pizza.png';
 import manage_account_icon from './manage_account.png';
 import logout_icon from './logout_icon.png';
+import addIconWhite from './add_icon_white.png';
+import addIconGreen from './add_icon_green.png';
+import removeIcon from './remove_icon_red.png';
 
 import menu_1 from './menu_1.png'
 import menu_2 from './menu_2.png'
@@ -35,6 +38,9 @@ export const assets = {
     main_logo,
     manage_account_icon,
     logout_icon,
+    addIconWhite,
+    addIconGreen,
+    removeIcon,
     
     // Social media icons
     facebook_icon,

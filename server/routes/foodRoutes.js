@@ -1,4 +1,4 @@
-import expreess from 'express';
+import express from 'express';
 import { getAllFoods } from '../controllers/foodController.js';
 
 const foodRouter = expreess.Router();

@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 
 const Navbar = () =>{
-    const nevigate = useNavigate();
+    const navigate = useNavigate();
     const account = () => {
-        nevigate("/account")
+        navigate("/account")
     }
 
     return(

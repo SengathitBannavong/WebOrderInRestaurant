@@ -7,7 +7,6 @@ const StoreContextProvider = (props) => {
     const url  = "http://localhost:4000";
     const [food_list, setFoodList] = useState([]);
 
-
     useEffect(() => {
         async function loadData() {
             const food_list = await fetchFoodList(url);

@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext }from 'react';
 import './Cart_Detail.css'; // Assuming you'll create a CSS file for styling
+import { StoreContext } from '../../context/StoreContext.jsx';
 
-const CartDetail = ({ cart = [] }) => {
+const CartDetail = () => {
     // Calculate subtotal
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const { getTotalCartAmount } = useContext(StoreContext);
+    const subtotal = getTotalCartAmount();
     
     // Delivery fee logic (example: $2 fee or free for orders over $20)
-    const deliveryFee = subtotal > 20 ? 0 : 2;
+    const deliveryFee = subtotal > 0 ? (subtotal < 20 ? 2 : 0) : 0;
     
     // Calculate total
     const total = subtotal + deliveryFee;

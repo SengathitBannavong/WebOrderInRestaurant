@@ -20,6 +20,14 @@ const StoreContextProvider = (props) => {
             if (food_list) {
                 setFoodList(food_list);
             }
+
+            const savedCartItems = localStorage.getItem("cartItems");
+            if (savedCartItems) {
+                setCartItems(JSON.parse(savedCartItems)); // Parse the string back to an object
+            } else {
+                setCartItems({}); // Initialize with empty object, not string
+                console.log("No items in cart");
+            }
         }
         loadData();
     }, []);

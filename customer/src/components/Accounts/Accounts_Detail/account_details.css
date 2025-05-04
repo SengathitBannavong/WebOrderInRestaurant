@@ -1,0 +1,61 @@
+.account-details {
+    height: 100%;
+}
+
+.user-info {
+    margin-bottom: 1.5rem;
+}
+
+.user-info p {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.edit-profile-form label {
+    font-weight: 500;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.edit-profile-form .form-control {
+    border-radius: 8px;
+    border-color: #e0e0e0;
+    padding: 0.6rem 1rem;
+}
+
+.edit-profile-form .form-control:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 107, 0.25);
+}
+
+.cancel-edit-btn, .save-profile-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+}
+
+.save-profile-btn {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.2);
+}
+
+.edit-profile-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.save-success {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 0.85rem;
+    color: #28a745;
+    animation: fadeInOut 3s ease;
+}
+
+@keyframes fadeInOut {
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
+}

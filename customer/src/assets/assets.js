@@ -12,6 +12,8 @@ import search_icon from './search_icon.png';
 import twitter_icon from './twitter_icon.png';
 import main_logo from './logo.png';
 import pizza from './food_pizza.png';
+import manage_account_icon from './manage_account.png';
+import logout_icon from './logout_icon.png';
 
 // Export all assets as a single object for easy access
 export const assets = {
@@ -22,6 +24,8 @@ export const assets = {
     profile_icon,
     search_icon,
     main_logo,
+    manage_account_icon,
+    logout_icon,
     
     // Social media icons
     facebook_icon,

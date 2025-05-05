@@ -4,6 +4,7 @@ import config from './config/index.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import foodRouter from './routes/foodRoutes.js';
+import tableRouter from './routes/tableRoutes.js';
 
 // app config 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/images", express.static("uploads"));
 app.use("/api/user", userRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/food", foodRouter);
+app.use("/api/table", tableRouter);
 
 
 app.listen(port, () => {

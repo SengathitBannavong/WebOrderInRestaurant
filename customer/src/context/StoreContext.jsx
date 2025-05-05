@@ -1,18 +1,24 @@
 import { createContext, useEffect, useState } from "react";
-import { fetchFoodList } from "./unit_context/foodcontext.jsx";
 import {
     addToCart,
-    removeFromCart,
     clearCart,
     getTotalCartAmount,
+    removeFromCart,
 } from "./unit_context/cartcontext.jsx";
+import {
+    fetchTableList,
+} from "./unit_context/tablecontext.jsx";
+import { 
+    fetchFoodList 
+} from "./unit_context/foodcontext.jsx";
 
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
     const url  = "http://localhost:4000";
-    const [food_list, setFoodList] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
+    const [food_list, setFoodList] = useState([]); 
+    const [cartItems, setCartItems] = useState({});
+    const [table, setTable] = useState({}); 
 
     useEffect(() => {
         async function loadData() {
@@ -23,12 +29,22 @@ const StoreContextProvider = (props) => {
 
             const savedCartItems = localStorage.getItem("cartItems");
             if (savedCartItems) {
-                setCartItems(JSON.parse(savedCartItems)); // Parse the string back to an object
+                setCartItems(JSON.parse(savedCartItems));
             } else {
-                setCartItems({}); // Initialize with empty object, not string
+                setCartItems({});
                 console.log("No items in cart");
             }
         }
+
+        async function loadTable() {
+            const table_list = await fetchTableList(url);
+            if (table_list) {
+                setTable(table_list);
+            }else {
+                console.log("Error fetching table list");
+            }
+        }
+        loadTable();
         loadData();
     }, []);
 
@@ -37,6 +53,7 @@ const StoreContextProvider = (props) => {
         food_list,
         url,
         cartItems,
+        table,
 
         // Fuctions
         addToCart: (id) => addToCart(cartItems, setCartItems, id),

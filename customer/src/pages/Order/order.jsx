@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './order.css';
 import CartDetail from '../../components/Cart/Cart_Detail';
+import { StoreContext } from '../../context/StoreContext.jsx';
 
 const Order = () => {
     const [formData, setFormData] = useState({
@@ -22,12 +23,11 @@ const Order = () => {
         // TODO: ส่งข้อมูลไป backend
     };
 
-    const cartItems = [
-        { id: 1, name: 'Product 1', price: 10, quantity: 2 },
-        { id: 2, name: 'Product 2', price: 20, quantity: 1 },
-    ];
-
-    const tableNumbers = [1, 2, 3, 4, 5];
+    const { table } = useContext(StoreContext);
+    const availableTables = Array.isArray(table) 
+    ? table.filter(t => t.tableStatus === "Available") 
+    : [];
+    
     const isDining = formData.orderType === 'dining';
 
     return (
@@ -61,9 +61,9 @@ const Order = () => {
                             required
                         >
                             <option value="">Select a table</option>
-                            {tableNumbers.map((num) => (
-                                <option key={num} value={num}>
-                                    Table {num}
+                            {availableTables.map((table) => (
+                                <option key={table._id} value={table.tableIndex}>
+                                    Table {table.tableIndex}
                                 </option>
                             ))}
                         </select>
@@ -72,7 +72,7 @@ const Order = () => {
             </div>
             <div className="place-order-right">
                 <div className="cart-total">
-                    <CartDetail cart={cartItems} />
+                    <CartDetail />
                     <button type="submit">PROCEED TO PAYMENT</button>
                 </div>
             </div>

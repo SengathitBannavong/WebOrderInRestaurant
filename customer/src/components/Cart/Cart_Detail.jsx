@@ -8,8 +8,8 @@ const CartDetail = () => {
     const subtotal = getTotalCartAmount();
     
     // Delivery fee logic (example: $2 fee or free for orders over $20)
-    const deliveryFee = subtotal > 0 ? (subtotal < 20 ? 2 : 0) : 0;
-    
+    const deliveryFee = subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0; // ## TODO: change delivery fee to discount with promo code
+
     // Calculate total
     const total = subtotal + deliveryFee;
 
@@ -25,7 +25,7 @@ const CartDetail = () => {
                     </div>
                     <hr />
                     <div className="cart-total-details">
-                        <p>Delivery Fee</p>
+                        <p>Discount is future</p>
                         <p>${deliveryFee.toFixed(2)}</p>
                     </div>
                     <hr />

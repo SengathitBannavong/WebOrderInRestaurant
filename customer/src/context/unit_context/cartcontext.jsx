@@ -3,6 +3,7 @@ export const addToCart = (cartItems, setCartItems, itemId) => {
         ...cartItems,
         [itemId]: (cartItems[itemId] || 0) + 1,
     };
+    console.log("Updated cart:", updatedCart);
     setCartItems(updatedCart);
     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
 };

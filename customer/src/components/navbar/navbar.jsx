@@ -1,8 +1,10 @@
 import "./navbar.css";
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { assets } from "../../assets/assets.js";
 import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../../context/StoreContext.jsx";
+
 
 
 const Navbar = () =>{
@@ -10,6 +12,8 @@ const Navbar = () =>{
     const account = () => {
         navigate("/account")
     }
+    const { cartItems } = useContext(StoreContext);
+    const cartItemCount = Object.values(cartItems).reduce((sum, qty) => sum + qty, 0);
 
     return(
         <div className="navbar">
@@ -36,8 +40,13 @@ const Navbar = () =>{
                 <div className="narbar-basket-icon" style={{ position : "relative" }}>
                     <Link to="/cart">
                         <img src={assets.basket_icon} alt="" />
-                        {/* if is 0 not show */}
-                        <span className="cart-count">1</span>
+                        {
+                            cartItemCount > 0 && (
+                                <span className="cart-count">
+                                    {cartItemCount}
+                                </span>
+                            )
+                        }
                     </Link>
                 </div>
                 <div className="navbar-profile">

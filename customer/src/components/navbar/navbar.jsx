@@ -12,6 +12,9 @@ const Navbar = () =>{
     const account = () => {
         navigate("/account")
     }
+    const myorders = () => {
+        navigate("/myorders")
+    }
     const { cartItems } = useContext(StoreContext);
     const cartItemCount = Object.values(cartItems).reduce((sum, qty) => sum + qty, 0);
 
@@ -54,7 +57,7 @@ const Navbar = () =>{
                     <ul className="navbar-profile-dropdown">
                         <li onClick={account}>< img src={assets.manage_account_icon} alt="" /><p>Manage</p></li>
                         <hr />
-                        <li><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
+                        <li onClick={myorders}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
                         <hr />
                         <li><img src={assets.logout_icon} alt="" /><p>Logout</p></li>
                     </ul>

@@ -9,13 +9,31 @@
 }
 .my-orders-order{
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 2fr 1fr;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 2fr 1fr;
     align-items: center;
     gap: 30px;
     font-size: 14px;
     padding: 10px 12px;
     color: #454545;
     border: 1px solid tomato;
+}
+
+.my-orders-order:nth-child(odd){
+    background-color: #ffe1e153;
+}
+
+.my-orders-order .red{
+    color: tomato;
+}
+
+.my-orders-order .cancel-order{
+    background-color: #ffe1e1;
+    color: #45454571;
+    border: none;
+    padding: 12px 0px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
 }
 
 .my-orders-order img{
@@ -32,7 +50,7 @@
     border: none;
     padding: 12px 0px;
     border-radius: 4px;
-    background-color: #ffe1e1;
+    background-color: #fe8484;
     cursor: pointer;
     color: #454545;
 }

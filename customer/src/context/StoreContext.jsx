@@ -11,6 +11,9 @@ import {
 import { 
     fetchFoodList 
 } from "./unit_context/foodcontext.jsx";
+import {
+    fetchOrders
+} from "./unit_context/ordercontext.jsx";
 
 export const StoreContext = createContext(null);
 
@@ -60,6 +63,7 @@ const StoreContextProvider = (props) => {
         removeFromCart: (id) => removeFromCart(cartItems, setCartItems, id),
         clearCart: () => clearCart(setCartItems),
         getTotalCartAmount: () => getTotalCartAmount(cartItems, food_list),
+        fetchOrders: () => fetchOrders(url),
     }
     
     return (

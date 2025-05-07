@@ -16,22 +16,28 @@ app.use(express.json());
 // database config
 config.connectDB();
 
-// routes
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
+// routes test 
 app.get('/api', (req, res) => {
     res.send('API is working!');
 });
 
+// route image
 app.use("/images", express.static("uploads"));
+
+// route user
 app.use("/api/user", userRouter);
+
+// route order
 app.use("/api/order", orderRouter);
+
+// route food
 app.use("/api/food", foodRouter);
+
+// route table
 app.use("/api/table", tableRouter);
 
 
+// url listen in port
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

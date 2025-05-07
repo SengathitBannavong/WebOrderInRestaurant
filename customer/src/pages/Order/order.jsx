@@ -1,9 +1,13 @@
 import React, { useContext, useState } from 'react';
 import './order.css';
 import CartDetail from '../../components/Cart/Cart_Detail';
+import { useNavigate } from "react-router-dom"
 import { StoreContext } from '../../context/StoreContext.jsx';
+import { toast } from 'react-toastify'
 
 const Order = () => {
+    const { table, food_list, cartItems, getTotalCartAmount, clearCart } = useContext(StoreContext);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         orderType: 'dining',
         tableNumber: '',
@@ -19,11 +23,60 @@ const Order = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Order submitted with data:', formData);
-        // TODO: ส่งข้อมูลไป backend
+
+        let orderItems = [];
+        food_list.map((item) => {
+            if(cartItems[item._id] > 0) {
+                let itemInfo = item;
+                itemInfo["quantity"] = cartItems[item._id];
+                orderItems.push(itemInfo);
+            }
+        });
+        let data_address = {};
+        if(!isDining){
+            data_address = {
+                status : "take away",
+                table : 0
+            }
+        }else{
+            data_address = {
+                status : "dining",
+                table : formData.tableNumber
+            }
+        }
+
+        const subtotal = getTotalCartAmount();
+        // Delivery fee logic (example: $2 fee or free for orders over $20)
+        const deliveryFee = subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0; // ## TODO: change delivery fee to discount with promo code
+        // Calculate total
+        const total = subtotal + deliveryFee;
+
+        let orderData = {
+            address : data_address,
+            items : orderItems,
+            amount : total,
+        }
+
+        // call api
+        console.log("Order Data: ", orderData);
+        // example response
+        let response = {
+            success: true,
+            message: "Order placed successfully",
+        }
+
+        if(response.success) {
+            toast.success("🎉 Order Placed Successfully");
+            clearCart();
+            setTimeout(() => {
+                navigate("/");
+            }
+            , 1500);
+        }else{
+            toast.error("❌ Order Failed: " + response.message);
+        }
     };
 
-    const { table } = useContext(StoreContext);
     const availableTables = Array.isArray(table) 
     ? table.filter(t => t.tableStatus === "Available") 
     : [];

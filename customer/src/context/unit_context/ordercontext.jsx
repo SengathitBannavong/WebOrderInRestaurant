@@ -5,7 +5,7 @@ export const fetchOrders = async (url) => {
     if(response.data.success) {
         return response.data.data;
     }else {
-        console.log("Error fetching table list");
+        console.log("Error fetching order list");
         return [];
     }
 }

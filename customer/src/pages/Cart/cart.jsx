@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CartDetail from '../../components/Cart/Cart_Detail';
 import './cart.css';
+import { StoreContext } from '../../context/StoreContext.jsx';
+
 const Cart = () => {
     const navigate = useNavigate();
-
-    // simple data
-    const cartItems = [
-        {id:1, name: 'Product 1', price: 10, quantity: 2},
-        {id:2, name: 'Product 2', price: 20, quantity: 1}
-    ];
+    const {url, cartItems, food_list, removeFromCart, getTotalCartAmount } = useContext(StoreContext);
     
     return (
     <div className='cart'>
@@ -25,12 +22,28 @@ const Cart = () => {
             </div>
             <br />
             <hr />
-            {/* This is area of function show orders list */}
+            {food_list.map((item) => {
+                if (cartItems[item._id] > 0) {
+                    return (
+                    <div key={item._id}>
+                        <div className='cart-items-title cart-items-item'>
+                        <img src={url+"/images/"+item.image} alt="" />
+                        <p>{item.name}</p>
+                        <p>${item.price}</p>
+                        <p>{cartItems[item._id]}</p>
+                        <p>${item.price * cartItems[item._id]}</p>
+                        <p onClick={()=>removeFromCart(item._id)} className='cross'>x</p>
+                        </div>
+                        <hr />
+                    </div>
+                    )
+                }
+            })}
         </div>
         <div className='cart-bottom'>
             {/* This div is show total prices of order */}
             <div className='cart-total'>
-                <CartDetail cart={cartItems} />
+                <CartDetail />
                 <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
             </div>
             {/* This div is show promo code to enter but currents still dont have function to handle */}

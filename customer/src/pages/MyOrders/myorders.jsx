@@ -1,35 +1,71 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './myorders.css';
 import { assets } from '../../assets/assets.js'; 
+import { StoreContext } from '../../context/StoreContext.jsx';
 
 const MyOrders = () => {
-    // TODO: Implement MyOrders functionality call in context
+    const { fetchOrders } = useContext(StoreContext);
+    const [listOrder,setListOrder] = useState({});
+    const token  = "680b3f65275b19c8f712d432"; // exmaple token, you should get it from local storage or context
+    
+    const fetchOrderList = async () => {
+        const order_list = await fetchOrders();
+        if (order_list) {
+            setListOrder(order_list);
+        } else {
+            console.log("Error fetching order list");
+        }
+    }
+
+    useEffect(() => {
+        fetchOrderList();
+    }, []);
+
     return (
         <div className='my-orders'>
             <h2>My Orders</h2>
             <div className="container">
-                {/* This is a placeholder. Replace with actual order data from API */}
-                <p className="placeholder-message">
-                    My Orders functionality will be implemented in a future update.
-                </p>
-                
-                {/* Example of what the order items will look like */}
-                <div className="my-orders-order" style={{opacity: 0.5}}>
-                    <img src={assets.parcel_icon} alt="" />
-                    <p>Pizza x 2, Soda x 1</p>
-                    <p>$25.00</p>
-                    <p>Items: 2</p>
-                    <p><span>&#x25cf;</span><b>Pending</b></p>
-                    <button disabled>Track Order</button>
-                    <p>Example Order Item (Not functional yet)</p>
-                </div>
-                {/* 
-                Implementation Notes:
-                - Fetch user orders from API
-                - Map through orders and display them
-                - Add order tracking functionality
-                - Add order management (cancel, etc.) 
-                */}
+            {
+                listOrder.length > 0 ? (
+                listOrder.map((order, index) => {
+                    return order.userId === token ? (
+                    <div key={index} className='my-orders-order'>
+                        <img src={assets.parcel_icon} alt="" />
+                        <p>
+                        {
+                            order.items.length >= 1
+                            ? order.items.map((item, index) => {
+                                if (index === order.items.length - 1) {
+                                    return item.name + " x " + item.quantity;
+                                } else {
+                                    return item.name + " x " + item.quantity + ", ";
+                                }
+                            })
+                            : "NONE" + " x " + "NONE"
+                        }
+                        </p>
+                        <p className='red'>{order.address.status}</p>
+                        <p>${order.amount}.00</p>
+                        <p>Items: {order.items.length}</p>
+                        <p><span>&#x25cf;</span><b>{order.status}</b></p>
+                        {
+                            order.status === "Pending"
+                            ? (
+                                <button>Cancel Order</button>
+                            )
+                            :(
+                                <p className='cancel-order'>
+                                    Can't Order
+                                </p>
+                            )
+                        }
+                    </div>
+                    ) : null;
+                })
+                ) : (
+                <p>You don't have any orders yet.</p>
+                )
+            }
             </div>
         </div>
     );

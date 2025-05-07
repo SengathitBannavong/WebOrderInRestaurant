@@ -1,8 +1,10 @@
 import "./navbar.css";
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { assets } from "../../assets/assets.js";
 import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../../context/StoreContext.jsx";
+
 
 
 const Navbar = () =>{
@@ -10,6 +12,11 @@ const Navbar = () =>{
     const account = () => {
         navigate("/account")
     }
+    const myorders = () => {
+        navigate("/myorders")
+    }
+    const { cartItems } = useContext(StoreContext);
+    const cartItemCount = Object.values(cartItems).reduce((sum, qty) => sum + qty, 0);
 
     return(
         <div className="navbar">
@@ -36,8 +43,13 @@ const Navbar = () =>{
                 <div className="narbar-basket-icon" style={{ position : "relative" }}>
                     <Link to="/cart">
                         <img src={assets.basket_icon} alt="" />
-                        {/* if is 0 not show */}
-                        <span className="cart-count">1</span>
+                        {
+                            cartItemCount > 0 && (
+                                <span className="cart-count">
+                                    {cartItemCount}
+                                </span>
+                            )
+                        }
                     </Link>
                 </div>
                 <div className="navbar-profile">
@@ -45,7 +57,7 @@ const Navbar = () =>{
                     <ul className="navbar-profile-dropdown">
                         <li onClick={account}>< img src={assets.manage_account_icon} alt="" /><p>Manage</p></li>
                         <hr />
-                        <li><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
+                        <li onClick={myorders}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
                         <hr />
                         <li><img src={assets.logout_icon} alt="" /><p>Logout</p></li>
                     </ul>

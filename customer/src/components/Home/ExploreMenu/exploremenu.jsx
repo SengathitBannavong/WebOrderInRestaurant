@@ -1,13 +1,23 @@
 import React from 'react';
 import './exploremenu.css';
+import { menu_list } from '../../../assets/assets';
 
-const ExploreMenu = () => {
+const ExploreMenu = ( {category,setCategory} ) => {
     return (
         <div className='explore-menu' id='explore-menu'>
             <h1>Explore Menu</h1>
             <p className='explore-menu-text'>This is types of menu, you can filter type of food you want</p>
             <div className='explore-menu-list'>
-                {/* Function show menu list filter by types */}
+                {
+                    menu_list.map((item, index) => {
+                        return (
+                            <div onClick={() => setCategory(prev => prev === item.menu_name ? "ALL" : item.menu_name)} className='explore-menu-list-item' key={index}>
+                                <img className= { category === item.menu_name ? "active" : "" } src={item.menu_image} alt={item.menu_name} />
+                                <p>{item.menu_name}</p>
+                            </div>
+                        )
+                    })
+                }
             </div>
             <hr />
         </div>

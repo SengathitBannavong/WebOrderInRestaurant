@@ -4,11 +4,12 @@ import FoodDisplay from '../../components/Home/FoodDisplay/fooddisplay.jsx';
 import ExploreMenu from '../../components/Home/ExploreMenu/exploremenu.jsx';
 
 const Home = () => {
+    const [category, setCategory] = React.useState('ALL');
     return (
         <div>
             <Header />
-            <ExploreMenu />
-            <FoodDisplay />
+            <ExploreMenu category={category} setCategory={setCategory} />
+            <FoodDisplay category={category} />
         </div>
     );
 };

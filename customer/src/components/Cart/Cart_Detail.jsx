@@ -1,39 +1,48 @@
-import React, { useContext }from 'react';
-import './Cart_Detail.css'; // Assuming you'll create a CSS file for styling
+import React, { useContext, useState } from 'react';
+import './Cart_Detail.css';
 import { StoreContext } from '../../context/StoreContext.jsx';
 
-const CartDetail = () => {
-    // Calculate subtotal
+const CartDetail = ({ discount }) => {
     const { getTotalCartAmount } = useContext(StoreContext);
-    const subtotal = getTotalCartAmount();
-    
-    // Delivery fee logic (example: $2 fee or free for orders over $20)
-    const deliveryFee = subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0; // ## TODO: change delivery fee to discount with promo code
+    const [paymentMethod, setPaymentMethod] = useState('');
 
-    // Calculate total
-    const total = subtotal + deliveryFee;
+    const subtotal = getTotalCartAmount();
+    const discountedSubtotal = subtotal - discount;
+    const deliveryFee = discountedSubtotal > 0 && discountedSubtotal < 100 ? 2 : 0;
+    const total = discountedSubtotal + deliveryFee;
 
     return (
         <div className="cart-detail-container">
-            {/* This div is show total prices of order */}
             <div className='cart-total'>
                 <h2>Cart Totals</h2>
-                <div>
-                    <div className="cart-total-details">
-                        <p>Subtotal</p>
-                        <p>${subtotal.toFixed(2)}</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <p>Discount is future</p>
-                        <p>${deliveryFee.toFixed(2)}</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <b>Total</b>
-                        <b>${total.toFixed(2)}</b>
-                    </div>
+                <div className="cart-total-details">
+                    <p>Subtotal</p>
+                    <p>${subtotal.toFixed(2)}</p>
                 </div>
+                <hr />
+                <div className="cart-total-details">
+                    <p>Discount</p>
+                    <p>-${discount.toFixed(2)}</p>
+                </div>
+                <hr />
+                <div className="cart-total-details">
+                    <p>Delivery Fee</p>
+                    <p>${deliveryFee.toFixed(2)}</p>
+                </div>
+                <hr />
+                <div className="cart-total-details total-row">
+                    <b>Total</b>
+                    <b>${total.toFixed(2)}</b>
+                </div>
+            </div>
+
+            <div className="payment-method">
+                <h3>Select Payment Method</h3>
+                <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                    <option value="">-- Choose --</option>
+                    <option value="credit-card">Credit Card</option>
+                    <option value="cash">Cash on Delivery</option>
+                </select>
             </div>
         </div>
     );

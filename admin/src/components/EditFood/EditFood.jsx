@@ -28,7 +28,6 @@ const EditFood = ({ id, url, onSuccess }) => {
                         category: foodData.category || "Salad"
                     });
                     setImagePreview(foodData.image || "");
-                    console.log(formData);
                 } else {
                     toast.error("Failed to load food data");
                 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllOrders, placeOrder, userOrders } from "../controllers/orderController.js";
+import { getAllOrders, placeOrder, userOrders, removeOrderById } from "../controllers/orderController.js";
 
 const orderRouter = express.Router();
 
@@ -8,6 +8,7 @@ orderRouter.get('/list', getAllOrders); // get all orders
 
 // POST
 orderRouter.post("/place", placeOrder); // post order to server
-orderRouter.post("/userorders", userOrders); // get user orders
+orderRouter.get("/:id", userOrders); // get user orders
+orderRouter.delete("/remove/:id", removeOrderById); // delete order by id
 
 export default orderRouter;

@@ -4,12 +4,11 @@ import { assets } from '../../assets/assets.js';
 import { StoreContext } from '../../context/StoreContext.jsx';
 
 const MyOrders = () => {
-    const { fetchOrders } = useContext(StoreContext);
+    const { fetchOrderById, token } = useContext(StoreContext);
     const [listOrder,setListOrder] = useState({});
-    const token  = "680b3f65275b19c8f712d432"; // exmaple token, you should get it from local storage or context
     
     const fetchOrderList = async () => {
-        const order_list = await fetchOrders();
+        const order_list = await fetchOrderById(token);
         if (order_list) {
             setListOrder(order_list);
         } else {
@@ -55,7 +54,7 @@ const MyOrders = () => {
                             )
                             :(
                                 <p className='cancel-order'>
-                                    Can't Order
+                                    Can't Cancel
                                 </p>
                             )
                         }

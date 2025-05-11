@@ -7,7 +7,7 @@ import './order.css';
 import axios from 'axios';
 
 const Order = () => {
-    const { table, food_list, cartItems, getTotalCartAmount, clearCart, url } = useContext(StoreContext);
+    const { table, food_list, cartItems, getTotalCartAmount, clearCart, url, token } = useContext(StoreContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         orderType: 'dining',
@@ -53,7 +53,7 @@ const Order = () => {
         const total = subtotal + deliveryFee;
 
         let orderData = {
-            userId: "67e6aebd7b9e1b7732f06fa4", // TODO: This is should get by token like if sent this to backend should make header: token to backend parse userId
+            userId: token,
             address : data_address,
             items : orderItems,
             amount : total,

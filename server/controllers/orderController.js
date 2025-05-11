@@ -33,7 +33,8 @@ const placeOrder = async (req, res) => {
 
 const userOrders = async (req, res) => {
     try {
-        const orders = await orderModel.find({ userId: req.params.userId });
+        const { id } = req.params;
+        const orders = await orderModel.find({ userId: id });
         if (!orders) {
             return res.status(404).json({ success: false, message: "No orders found" });
         }
@@ -44,4 +45,18 @@ const userOrders = async (req, res) => {
     }
 }
 
-export { getAllOrders, placeOrder, userOrders };
+const removeOrderById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const order = await orderModel.findByIdAndDelete(id);
+        if (!order) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+        res.json({ success: true, message: "Order deleted successfully" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error" });
+    }
+}
+
+export { getAllOrders, placeOrder, userOrders, removeOrderById };

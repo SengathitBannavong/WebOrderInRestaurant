@@ -12,7 +12,9 @@ import {
     fetchFoodList 
 } from "./unit_context/foodcontext.jsx";
 import {
-    fetchOrders
+    fetchOrders,
+    fetchOrderById,
+    removeOrderById
 } from "./unit_context/ordercontext.jsx";
 
 export const StoreContext = createContext(null);
@@ -21,7 +23,9 @@ const StoreContextProvider = (props) => {
     const url  = "http://localhost:4000";
     const [food_list, setFoodList] = useState([]); 
     const [cartItems, setCartItems] = useState({});
+    const id = "680b3f65275b19c8f712d432"; // Dummy id, replace with actual user id
     const [table, setTable] = useState({}); 
+    const [token, setToken] = useState(id); // Dummy id, replace with actual user id // Token should encrypt by JWT
 
     useEffect(() => {
         async function loadData() {
@@ -57,6 +61,7 @@ const StoreContextProvider = (props) => {
         url,
         cartItems,
         table,
+        token,
 
         // Fuctions
         addToCart: (id) => addToCart(cartItems, setCartItems, id),
@@ -64,6 +69,9 @@ const StoreContextProvider = (props) => {
         clearCart: () => clearCart(setCartItems),
         getTotalCartAmount: () => getTotalCartAmount(cartItems, food_list),
         fetchOrders: () => fetchOrders(url),
+        setToken: (token) => setToken(token),
+        fetchOrderById: (id) => fetchOrderById(url, id),
+        removeOrderById: (id) => removeOrderById(url, id),
     }
     
     return (

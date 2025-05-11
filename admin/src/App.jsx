@@ -1,14 +1,18 @@
-import { ToastContainer } from 'react-toastify' 
-import { Routes, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
-import Home from './pages/Home.jsx'
-import AddFood from './pages/AddFood.jsx'
-import ListFood from './pages/List.jsx'
-import Orders from './pages/Orders.jsx'
+import { useContext } from 'react'
 import Navbar from './components/Navbar/navbar.jsx'
 import Sidebar from './components/SlideBar/slidebar.jsx'
+import AddFood from './pages/AddFood.jsx'
+import Home from './pages/Home.jsx'
+import ListFood from './pages/List.jsx'
+import Orders from './pages/Orders.jsx'
+
+import { StoreContext } from './context/StoreContext.jsx'
 
 function App() {
+  const {url} = useContext(StoreContext);
   return (
     <>
       <div>
@@ -19,8 +23,8 @@ function App() {
           <Sidebar/>
             <Routes>
               <Route path='/' element = {<Home/>} />
-              <Route path='/addfood' element = {<AddFood/>} />
-              <Route path='/list' element = {<ListFood/>} />
+              <Route path='/addfood' element = {<AddFood url={url}/>} />
+              <Route path='/list' element = {<ListFood url={url}/>} />
               <Route path='/orders' element = {<Orders/>} />
             </Routes>
         </div>

@@ -1,10 +1,10 @@
 import React from 'react';
 import MenuList from '../components/MenuList/menulist.jsx';
 
-const List = () => {
+const List = ({url}) => {
     return (
         <div className='add'>
-            <MenuList />
+            <MenuList url={url} />
         </div>
     );
 };

@@ -1,20 +1,56 @@
-import React, { useContext, useEffect, useState } from 'react';
-import './myorders.css';
-import { assets } from '../../assets/assets.js'; 
+import { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { assets } from '../../assets/assets.js';
 import { StoreContext } from '../../context/StoreContext.jsx';
+import './myorders.css';
 
 const MyOrders = () => {
-    const { fetchOrders } = useContext(StoreContext);
-    const [listOrder,setListOrder] = useState({});
-    const token  = "680b3f65275b19c8f712d432"; // exmaple token, you should get it from local storage or context
+    const { fetchOrderById, token, removeOrderById } = useContext(StoreContext);
+    const [listOrder, setListOrder] = useState([]);
+    // States for confirmation popup
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [orderToCancel, setOrderToCancel] = useState(null);
     
     const fetchOrderList = async () => {
-        const order_list = await fetchOrders();
+        const order_list = await fetchOrderById(token);
         if (order_list) {
             setListOrder(order_list);
         } else {
             console.log("Error fetching order list");
         }
+    }
+
+    const handleCancelOrder = async (orderId) => {
+        const response = await removeOrderById(orderId);
+        console.log(response);
+        if (response) {
+            await fetchOrderList();
+            toast.success("Order cancelled successfully");
+        } else {
+            toast.error("Error cancelling order");
+        }
+    }
+    
+    // Show confirmation popup
+    const showCancelConfirmation = (orderId) => {
+        setOrderToCancel(orderId);
+        setShowConfirmPopup(true);
+    }
+    
+    // Handle user's confirmation decision
+    const handleConfirmCancel = () => {
+        if (orderToCancel) {
+            handleCancelOrder(orderToCancel);
+        }
+        // Close the popup
+        setShowConfirmPopup(false);
+        setOrderToCancel(null);
+    }
+    
+    // Handle user declining to cancel
+    const handleDeclineCancel = () => {
+        setShowConfirmPopup(false);
+        setOrderToCancel(null);
     }
 
     useEffect(() => {
@@ -51,11 +87,13 @@ const MyOrders = () => {
                         {
                             order.status === "Pending"
                             ? (
-                                <button>Cancel Order</button>
+                                <button onClick={() => showCancelConfirmation(order._id)}>
+                                    Cancel Order
+                                </button>
                             )
                             :(
                                 <p className='cancel-order'>
-                                    Can't Order
+                                    Can't Cancel
                                 </p>
                             )
                         }
@@ -67,6 +105,30 @@ const MyOrders = () => {
                 )
             }
             </div>
+            
+            {/* Confirmation Popup */}
+            {showConfirmPopup && (
+                <div className="confirm-popup-overlay">
+                    <div className="confirm-popup">
+                        <h3>Cancel Order</h3>
+                        <p>Are you sure you want to cancel this order?</p>
+                        <div className="confirm-buttons">
+                            <button 
+                                className="confirm-no" 
+                                onClick={handleDeclineCancel}
+                            >
+                                No
+                            </button>
+                            <button 
+                                className="confirm-yes" 
+                                onClick={handleConfirmCancel}
+                            >
+                                Yes, Cancel Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

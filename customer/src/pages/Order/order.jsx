@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react';
-import './order.css';
+import { useContext, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import CartDetail from '../../components/Cart/Cart_Detail';
-import { useNavigate } from "react-router-dom"
 import { StoreContext } from '../../context/StoreContext.jsx';
-import { toast } from 'react-toastify'
+import './order.css';
+import axios from 'axios';
 
 const Order = () => {
-    const { table, food_list, cartItems, getTotalCartAmount, clearCart } = useContext(StoreContext);
+    const { table, food_list, cartItems, getTotalCartAmount, clearCart, url } = useContext(StoreContext);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         orderType: 'dining',
@@ -21,7 +22,7 @@ const Order = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         let orderItems = [];
@@ -52,20 +53,15 @@ const Order = () => {
         const total = subtotal + deliveryFee;
 
         let orderData = {
+            userId: "67e6aebd7b9e1b7732f06fa4", // TODO: This is should get by token like if sent this to backend should make header: token to backend parse userId
             address : data_address,
             items : orderItems,
             amount : total,
         }
 
         // call api
-        console.log("Order Data: ", orderData);
-        // example response
-        let response = {
-            success: true,
-            message: "Order placed successfully",
-        }
-
-        if(response.success) {
+        let response = await axios.post(url+"/api/order/place",orderData);
+        if(response.data.success) {
             toast.success("🎉 Order Placed Successfully");
             clearCart();
             setTimeout(() => {

@@ -20,7 +20,10 @@ const placeOrder = async (req, res) => {
                 address: req.body.address,
             }
         )
-        await newOrder.save();
+        let ans = await newOrder.save();
+        if(!ans){
+            return res.status(404).json({success:false,message:"Order not placed"})
+        }
         res.json({success:true,message:"Order Placed Successfully"})
     }catch(error){
         console.log(error);

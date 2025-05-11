@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import UploadFood from '../components/UploadFood/uploadfood.jsx';
 
-const AddFood = () => {
+const AddFood = ({url}) => {
+    
     return (
         <div className='add'>
-            <UploadFood />
+            <UploadFood url={url} />
         </div>
     );
 };

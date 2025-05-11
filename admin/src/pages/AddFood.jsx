@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import UploadFood from '../components/UploadFood/uploadfood.jsx';
 
 const AddFood = ({url}) => {

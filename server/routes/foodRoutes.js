@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllFoods, addFood, removeFood } from '../controllers/foodController.js';
+import { getAllFoods, addFood, removeFood, getFoodById, editFood } from '../controllers/foodController.js';
 import multer from "multer";
 
 const foodRouter = express.Router();
@@ -20,5 +20,6 @@ foodRouter.get("/list", getAllFoods); // get all foods by admin
 // POST
 foodRouter.post("/add",uploads.single("image") ,addFood); // post food to server
 foodRouter.post("/remove", removeFood); // remove food from server
-
+foodRouter.get("/getfood/:id", getFoodById); // get food by id
+foodRouter.post("/edit",uploads.single("image"), editFood); // edit food by id
 export default foodRouter;

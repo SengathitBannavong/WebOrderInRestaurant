@@ -23,7 +23,7 @@ export const fetchOrderById = async (url, id) => {
 export const removeOrderById = async (url, id) => {
     const response = await axios.delete(`${url}/api/order/remove/${id}`);
     if(response.data.success) {
-        return response.data.data;
+        return response;
     }else {
         console.log("Error deleting order by id");
         return null;

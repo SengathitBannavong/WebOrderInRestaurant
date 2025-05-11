@@ -25,6 +25,11 @@ const Order = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if(!cartItems || Object.keys(cartItems).length === 0) {
+            toast.error("❌ Cart is empty");
+            return;
+        }
+
         let orderItems = [];
         food_list.map((item) => {
             if(cartItems[item._id] > 0) {
@@ -65,9 +70,9 @@ const Order = () => {
             toast.success("🎉 Order Placed Successfully");
             clearCart();
             setTimeout(() => {
-                navigate("/");
+                navigate("/myorders");
             }
-            , 1500);
+            , 500);
         }else{
             toast.error("❌ Order Failed: " + response.message);
         }

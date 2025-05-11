@@ -13,7 +13,8 @@ import {
 } from "./unit_context/foodcontext.jsx";
 import {
     fetchOrders,
-    fetchOrderById
+    fetchOrderById,
+    removeOrderById
 } from "./unit_context/ordercontext.jsx";
 
 export const StoreContext = createContext(null);
@@ -70,6 +71,7 @@ const StoreContextProvider = (props) => {
         fetchOrders: () => fetchOrders(url),
         setToken: (token) => setToken(token),
         fetchOrderById: (id) => fetchOrderById(url, id),
+        removeOrderById: (id) => removeOrderById(url, id),
     }
     
     return (

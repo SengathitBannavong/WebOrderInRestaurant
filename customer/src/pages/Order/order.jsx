@@ -37,6 +37,19 @@ const Order = () => {
     const deliveryFee = subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0;
     const total = Math.max(0, subtotal + deliveryFee - discount);
 
+    // Validate promo code again before placing order
+    const validatePromoBeforeOrder = async () => {
+        const code = promoCode.trim().toLowerCase();
+        if (!code) return 0;
+        try {
+            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            if (res.data.success && res.data.data) {
+                return res.data.data.discount;
+            }
+        } catch (err) {}
+        return 0;
+    };
+
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         setLoading(true);
@@ -45,6 +58,17 @@ const Order = () => {
             toast.error("❌ Cart is empty");
             setLoading(false);
             return;
+        }
+
+        // Validate promo code with backend before placing order
+        let validatedDiscount = discount;
+        if (promoCode) {
+            validatedDiscount = await validatePromoBeforeOrder();
+            if (validatedDiscount === 0) {
+                toast.error("Promo code is invalid or expired");
+                setLoading(false);
+                return;
+            }
         }
 
         let orderItems = [];
@@ -72,10 +96,10 @@ const Order = () => {
             userId: token,
             address: data_address,
             items: orderItems,
-            amount: total,
+            amount: Math.max(0, subtotal + deliveryFee - validatedDiscount),
             paymentMethod,
-            promoCode: discount > 0 ? promoCode.trim() : null,
-            discount,
+            promoCode: validatedDiscount > 0 ? promoCode.trim() : null,
+            discount: validatedDiscount,
             deliveryFee,
         }
 

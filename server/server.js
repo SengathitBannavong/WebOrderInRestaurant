@@ -5,6 +5,7 @@ import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import foodRouter from './routes/foodRoutes.js';
 import tableRouter from './routes/tableRoutes.js';
+import promoRouter from './routes/promoRoutes.js';
 
 // app config 
 const app = express();
@@ -36,6 +37,8 @@ app.use("/api/food", foodRouter);
 // route table
 app.use("/api/table", tableRouter);
 
+// route promo
+app.use("/api/promo", promoRouter);
 
 // url listen in port
 app.listen(port, () => {

@@ -1,39 +1,31 @@
-import React, { useContext }from 'react';
-import './Cart_Detail.css'; // Assuming you'll create a CSS file for styling
+import { useContext } from 'react';
 import { StoreContext } from '../../context/StoreContext.jsx';
 
-const CartDetail = () => {
-    // Calculate subtotal
+const CartDetail = ({ discount = 0, deliveryFee }) => {
     const { getTotalCartAmount } = useContext(StoreContext);
     const subtotal = getTotalCartAmount();
-    
-    // Delivery fee logic (example: $2 fee or free for orders over $20)
-    const deliveryFee = subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0; // ## TODO: change delivery fee to discount with promo code
-
-    // Calculate total
-    const total = subtotal + deliveryFee;
+    // deliveryFee is passed from parent, fallback to old logic if not provided
+    const fee = typeof deliveryFee === 'number' ? deliveryFee : (subtotal > 0 ? (subtotal < 100 ? 2 : 0) : 0);
+    const total = Math.max(0, subtotal + fee - discount);
 
     return (
-        <div className="cart-detail-container">
-            {/* This div is show total prices of order */}
-            <div className='cart-total'>
-                <h2>Cart Totals</h2>
-                <div>
-                    <div className="cart-total-details">
-                        <p>Subtotal</p>
-                        <p>${subtotal.toFixed(2)}</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <p>Discount is future</p>
-                        <p>${deliveryFee.toFixed(2)}</p>
-                    </div>
-                    <hr />
-                    <div className="cart-total-details">
-                        <b>Total</b>
-                        <b>${total.toFixed(2)}</b>
-                    </div>
-                </div>
+        <div className="cart-total">
+            <div className="cart-total-details">
+                <b>Subtotal</b>
+                <b>${subtotal.toFixed(2)}</b>
+            </div>
+            <div className="cart-total-details">
+                <b>Delivery Fee</b>
+                <b>${fee.toFixed(2)}</b>
+            </div>
+            <div className="cart-total-details">
+                <b>Discount</b>
+                <b>-${discount.toFixed(2)}</b>
+            </div>
+            <hr />
+            <div className="cart-total-details">
+                <b>Total</b>
+                <b>${total.toFixed(2)}</b>
             </div>
         </div>
     );

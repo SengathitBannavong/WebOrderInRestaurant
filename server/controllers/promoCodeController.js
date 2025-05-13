@@ -13,8 +13,10 @@ const getAllPromoCodes = async (req, res) => {
 // Add a new promo code
 const addPromoCode = async (req, res) => {
     try {
-        const { code, discount } = req.body;
-        if (!code || !discount) return res.status(400).json({ success: false, message: "Missing code or discount" });
+        let { code, discount } = req.body;
+        if (!code || discount === undefined) return res.status(400).json({ success: false, message: "Missing code or discount" });
+        code = code.trim().toLowerCase(); // Normalize code
+        if (typeof discount !== 'number' || discount <= 0) return res.status(400).json({ success: false, message: "Discount must be a positive number" });
         const exists = await promoCodeModel.findOne({ code });
         if (exists) return res.status(400).json({ success: false, message: "Promo code already exists" });
         const promo = new promoCodeModel({ code, discount });

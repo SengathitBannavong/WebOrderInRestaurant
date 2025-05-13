@@ -18,10 +18,13 @@ const CartDetail = ({ discount = 0, deliveryFee }) => {
                 <b>Delivery Fee</b>
                 <b>${fee.toFixed(2)}</b>
             </div>
-            <div className="cart-total-details">
-                <b>Discount</b>
-                <b>-${discount.toFixed(2)}</b>
-            </div>
+            {/* Only show discount if > 0 */}
+            {discount > 0 ? (
+                <div className="cart-total-details">
+                    <b>Discount</b>
+                    <b>- ${discount.toFixed(2)}</b>
+                </div>
+            ) : null}
             <hr />
             <div className="cart-total-details">
                 <b>Total</b>

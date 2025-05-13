@@ -90,7 +90,13 @@ const Cart = () => {
                                 type="text"
                                 placeholder='promo code'
                                 value={promoCode}
-                                onChange={e => setPromoCode(e.target.value)}
+                                onChange={e => {
+                                    setPromoCode(e.target.value.replace(/\s+/g, '').toLowerCase());
+                                    setDiscount(0);
+                                    setPromoError('');
+                                }}
+                                pattern="[a-zA-Z0-9]+"
+                                title="Promo code must be alphanumeric, no spaces."
                             />
                             <button type="button" onClick={handlePromoApply}>Apply</button>
                         </div>

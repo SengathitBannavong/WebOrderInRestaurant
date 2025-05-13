@@ -12,8 +12,32 @@ const Order = () => {
     const location = useLocation();
 
     // Get promo info from navigation state (from cart page)
-    const promoCode = location.state?.promoCode || '';
-    const discount = location.state?.discount || 0;
+    const [promoCode, setPromoCode] = useState(location.state?.promoCode || '');
+    const [discount, setDiscount] = useState(location.state?.discount || 0);
+
+    // Promo code input and apply logic for direct access
+    const [promoError, setPromoError] = useState('');
+    const handlePromoApply = async () => {
+        const code = promoCode.trim().toLowerCase();
+        if (!code) {
+            setDiscount(0);
+            setPromoError('Please enter a promo code');
+            return;
+        }
+        try {
+            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            if (res.data.success && res.data.data) {
+                setDiscount(res.data.data.discount);
+                setPromoError('');
+            } else {
+                setDiscount(0);
+                setPromoError('Invalid promo code');
+            }
+        } catch (err) {
+            setDiscount(0);
+            setPromoError('Invalid promo code');
+        }
+    };
 
     const [formData, setFormData] = useState({
         orderType: 'dining',
@@ -192,14 +216,28 @@ const Order = () => {
                         </label>
                     </div>
 
-                    {/* Show applied promo code and discount */}
-                    {discount > 0 && (
-                        <div className="promo-summary">
-                            <span>
-                                Promo "{promoCode}" applied: -${discount}
-                            </span>
+                    {/* Promo code input section */}
+                    <div className="promo-section">
+                        <div className="promo-section-row">
+                            <input
+                                type="text"
+                                placeholder="Enter promo code"
+                                value={promoCode}
+                                onChange={e => {
+                                    setPromoCode(e.target.value.replace(/\s+/g, '').toLowerCase());
+                                    setDiscount(0);
+                                    setPromoError('');
+                                }}
+                                pattern="[a-zA-Z0-9]+"
+                                title="Promo code must be alphanumeric, no spaces."
+                            />
+                            <button type="button" onClick={handlePromoApply}>Apply</button>
                         </div>
-                    )}
+                        <span className="promo-message">
+                            {promoError && <span style={{ color: 'red' }}>{promoError}</span>}
+                            {discount > 0 && <span style={{ color: 'green' }}>-${discount} discount applied</span>}
+                        </span>
+                    </div>
 
                     <button
                         type="submit"

@@ -1,13 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import CartDetail from '../../components/Cart/Cart_Detail';
 import './cart.css';
 import { StoreContext } from '../../context/StoreContext.jsx';
-
-const PROMO_CODES = {
-    save10: 10, // $10 off
-    food5: 5,   // $5 off
-};
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -18,13 +14,24 @@ const Cart = () => {
     const [discount, setDiscount] = useState(0);
     const [promoError, setPromoError] = useState('');
 
-    // Handle promo code apply
-    const handlePromoApply = () => {
+    // Handle promo code apply (now checks with backend)
+    const handlePromoApply = async () => {
         const code = promoCode.trim().toLowerCase();
-        if (PROMO_CODES[code]) {
-            setDiscount(PROMO_CODES[code]);
-            setPromoError('');
-        } else {
+        if (!code) {
+            setDiscount(0);
+            setPromoError('Please enter a promo code');
+            return;
+        }
+        try {
+            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            if (res.data.success && res.data.data) {
+                setDiscount(res.data.data.discount);
+                setPromoError('');
+            } else {
+                setDiscount(0);
+                setPromoError('Invalid promo code');
+            }
+        } catch (err) {
             setDiscount(0);
             setPromoError('Invalid promo code');
         }

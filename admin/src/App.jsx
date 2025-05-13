@@ -8,6 +8,7 @@ import AddFood from './pages/AddFood.jsx'
 import Home from './pages/Home.jsx'
 import ListFood from './pages/List.jsx'
 import Orders from './pages/Orders.jsx'
+import PromoCodeAdmin from './components/PromoCode/promocode.jsx'
 
 import { StoreContext } from './context/StoreContext.jsx'
 
@@ -26,6 +27,7 @@ function App() {
               <Route path='/addfood' element = {<AddFood url={url}/>} />
               <Route path='/list' element = {<ListFood url={url}/>} />
               <Route path='/orders' element = {<Orders/>} />
+              <Route path='/promocode' element={<PromoCodeAdmin url={url} />} />
             </Routes>
         </div>
       </div>

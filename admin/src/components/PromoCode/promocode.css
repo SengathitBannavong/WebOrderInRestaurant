@@ -1,0 +1,75 @@
+.promo-admin {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+}
+.promo-admin h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+.promo-form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.promo-form input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.promo-form button {
+    background: tomato;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.promo-form button:hover {
+    background: #e05239;
+}
+.promo-error {
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+.promo-success {
+    color: #388e3c;
+    margin-bottom: 10px;
+}
+.promo-list {
+    margin-top: 24px;
+}
+.promo-list h3 {
+    margin-bottom: 10px;
+    color: #444;
+}
+.promo-list ul {
+    list-style: none;
+    padding: 0;
+}
+.promo-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.promo-list button {
+    background: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+.promo-list button:hover {
+    background: #b71c1c;
+}

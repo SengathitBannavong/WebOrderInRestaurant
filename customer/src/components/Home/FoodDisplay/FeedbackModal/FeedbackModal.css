@@ -119,3 +119,17 @@ h2 {
 .submit-btn:hover {
   background-color: #007acc;
 }
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.filter-section select {
+  padding: 5px 80px;
+  border-radius: 4px;
+  border: 2px solid #ccc;
+}

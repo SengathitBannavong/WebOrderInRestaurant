@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './FeedbackModal.css';
 
 const FeedbackModal = ({ feedbacks, onClose, newFeedback, setNewFeedback, handleAddFeedback }) => {
+  const [filterStar, setFilterStar] = useState("all");
+
   // Hàm xử lý click chọn sao
   const handleStarClick = (starValue) => {
     setNewFeedback({ ...newFeedback, rating: starValue });
   };
+
+  // Lọc danh sách theo số sao
+  const filteredFeedbacks = filterStar === "all"
+    ? feedbacks
+    : feedbacks.filter(fb => fb.sao === Number(filterStar));
 
   return (
     <div className="feedback-modal-overlay">
@@ -13,10 +20,27 @@ const FeedbackModal = ({ feedbacks, onClose, newFeedback, setNewFeedback, handle
         <button className="close-btn" onClick={onClose}>×</button>
         <h2>Đánh giá món ăn</h2>
 
-        {feedbacks.length === 0 ? (
-          <p>Chưa có đánh giá nào.</p>
+        {/* Bộ lọc sao */}
+        <div className="filter-section">
+          <label htmlFor="starFilter">Ratting: </label>
+          <select
+            id="starFilter"
+            value={filterStar}
+            onChange={(e) => setFilterStar(e.target.value)}
+          >
+            <option value="all">Tất cả</option>
+            <option value="5">5 sao</option>
+            <option value="4">4 sao</option>
+            <option value="3">3 sao</option>
+            <option value="2">2 sao</option>
+            <option value="1">1 sao</option>
+          </select>
+        </div>
+
+        {filteredFeedbacks.length === 0 ? (
+          <p>Không có đánh giá nào phù hợp.</p>
         ) : (
-          feedbacks.map((fb, index) => (
+          filteredFeedbacks.map((fb, index) => (
             <div key={index} className="feedback-item">
               <p><strong>{fb.ten_user}</strong> ({fb.sao} ⭐):</p>
               <p>{fb.nhan_xet}</p>

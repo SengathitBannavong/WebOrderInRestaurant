@@ -6,6 +6,7 @@ import orderRouter from './routes/orderRoutes.js';
 import foodRouter from './routes/foodRoutes.js';
 import tableRouter from './routes/tableRoutes.js';
 import promoRouter from './routes/promoRoutes.js';
+import feedbackRouter from "./routes/feedbackRoute.js";
 
 // app config 
 const app = express();
@@ -39,6 +40,9 @@ app.use("/api/table", tableRouter);
 
 // route promo
 app.use("/api/promo", promoRouter);
+
+// route feedback
+app.use("/api/feedback", feedbackRouter);
 
 // url listen in port
 app.listen(port, () => {

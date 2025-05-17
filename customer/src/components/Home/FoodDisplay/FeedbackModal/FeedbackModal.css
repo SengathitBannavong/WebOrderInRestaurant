@@ -1,0 +1,229 @@
+.feedback-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.feedback-modal {
+  background-color: white;
+  padding: 30px;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.feedback-item {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.feedback-item p {
+  margin: 4px 0;
+}
+
+.feedback-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedback-form h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.rating-container {
+  font-size: 30px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  flex-direction: row-reverse; /* Reverses the stars */
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.rating-container .star {
+  color: #ccc; /* Default gray for unselected stars */
+  margin: 0 5px;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.rating-container .star.selected {
+  color: #ffb700; /* Brighter orange for selected stars */
+}
+
+/* This makes the hover effect apply to current and previous stars */
+.rating-container .star:hover,
+.rating-container .star:hover ~ .star {
+  color: #ffb700; /* Same color as selected for consistency */
+}
+
+/* Add slight pulse effect on hover */
+.rating-container .star:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+/* Optional enhancement: add tooltip on hover */
+.rating-container .star::before {
+  content: attr(data-rating);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.rating-container .star:hover::before {
+  opacity: 1;
+}
+
+.comment-input {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  resize: none;
+  margin-bottom: 20px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #0099ff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #007acc;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.filter-section select {
+  padding: 5px 80px;
+  border-radius: 4px;
+  border: 2px solid #ccc;
+}
+
+/* Enhanced filter section */
+.filter-section {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.star-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.filter-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+.filter-btn.active {
+  background-color: #ffeb3b;
+  border-color: #ffc107;
+  color: #333;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.star-icon {
+  color: #ffc107;
+  margin-left: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .star-filter-buttons {
+    justify-content: center;
+  }
+  
+  .filter-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}

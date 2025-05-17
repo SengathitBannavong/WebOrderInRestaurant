@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import './promocode.css';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import './promocode.css';
 
 const PromoCodeAdmin = ({ url }) => {
     const [promoCodes, setPromoCodes] = useState([]);

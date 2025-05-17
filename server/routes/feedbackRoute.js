@@ -23,11 +23,11 @@ router.post('/', async (req, res) => {
 
     await feedback.save();
     console.log("Đã lưu feedback:", feedback);
-    res.status(201).json({ message: "Gửi đánh giá thành công" });
+    res.status(201).json({ message: "Sent feedback successfully"});
 
   } catch (error) {
     res.status(500).json({
-      error: "Lỗi khi gửi đánh giá",
+      error: "Error while sending feedback",
       detail: error.message
     });
   }
@@ -37,10 +37,13 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const feedbacks = await FeedbackModel.find().sort({ createdAt: -1 });
-    res.json(feedbacks);
+    if (!feedbacks || feedbacks.length === 0) {
+      return res.status(404).json({ success: false, error: "Don't have any feedbacks" });
+    }
+    res.status(200).json({ success: true, feedbacks });
   } catch (err) {
     res.status(500).json({
-      error: "Không thể lấy đánh giá",
+      error: "Can't get feedbacks",
       detail: err.message
     });
   }

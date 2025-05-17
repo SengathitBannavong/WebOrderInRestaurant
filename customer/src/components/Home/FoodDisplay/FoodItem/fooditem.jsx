@@ -4,6 +4,7 @@ import { assets } from '../../../../assets/assets';
 import { StoreContext } from '../../../../context/StoreContext';
 import FeedbackModal from '../FeedbackModal/FeedbackModal';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
@@ -16,8 +17,11 @@ const FoodItem = ({ id, name, price, description, image }) => {
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
-        const response = await fetch(`${url}/api/feedback`);
-        const allFeedbacks = await response.json();
+        const response = await axios.get(`${url}/api/feedback`);
+        if(!response.data.success) {
+            throw new Error('Failed to fetch feedbacks');
+        }
+        const allFeedbacks = response.data.feedbacks;
 
         // Lọc feedback chỉ có ten_mon trùng với món hiện tại
         const filteredFeedbacks = allFeedbacks.filter(fb => fb.ten_mon === name);

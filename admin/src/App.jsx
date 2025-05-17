@@ -10,6 +10,7 @@ import ListFood from './pages/List.jsx'
 import Orders from './pages/Orders.jsx'
 import PromoCodeAdmin from './components/PromoCode/promocode.jsx'
 import Feedback from './pages/Feedback.jsx'
+import Dashboard_Feedback from './components/DashBoard/Feedback/D_feedback.jsx'
 
 import { StoreContext } from './context/StoreContext.jsx'
 
@@ -30,6 +31,7 @@ function App() {
               <Route path='/orders' element = {<Orders/>} />
               <Route path='/feedback' element = {<Feedback url={url}/>} />
               <Route path='/promocode' element={<PromoCodeAdmin url={url} />} />
+              <Route path='/feedback-dashboard' element={<Dashboard_Feedback url={url} />} />
             </Routes>
         </div>
       </div>

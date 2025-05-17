@@ -9,7 +9,7 @@ const FeedbackList = ({ url }) => {
   const fetchFeedbacks = async () => {
     try {
       const response = await axios.get(`${url}/api/feedback`);
-      setFeedbacks(response.data);
+      setFeedbacks(response.data.feedbacks);
     } catch (error) {
       toast.error("Error fetching feedbacks");
     }

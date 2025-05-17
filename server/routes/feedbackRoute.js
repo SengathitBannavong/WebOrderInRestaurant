@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
   try {
     const feedbacks = await FeedbackModel.find().sort({ createdAt: -1 });
     if (!feedbacks || feedbacks.length === 0) {
-      return res.status(404).json({ success: false, error: "Don't have any feedbacks" });
+      return res.status(200).json({ success: true, feedbacks: [] });
     }
     res.status(200).json({ success: true, feedbacks });
   } catch (err) {

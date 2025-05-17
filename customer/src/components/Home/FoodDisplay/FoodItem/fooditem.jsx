@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import './FoodItem.css';
 import { assets } from '../../../../assets/assets';
 import { StoreContext } from '../../../../context/StoreContext';
-import FeedbackModal from '../FeedbackModal/FeedbackModal'; // đường dẫn đến file modal
+import FeedbackModal from '../FeedbackModal/FeedbackModal';
+import { toast } from 'react-toastify';
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
@@ -29,7 +30,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
           setAverageRating(0);
         }
       } catch (err) {
-        console.error('Lỗi khi lấy feedback:', err);
+        console.error('Error', err);
       }
     };
 
@@ -57,7 +58,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
       });
 
       if (response.ok) {
-        alert('Đánh giá đã được gửi thành công!');
+        toast.success('Send feedback Completed');
         setNewFeedback({ rating: 0, comment: '' });
         setShowFeedback(false);
 
@@ -74,16 +75,18 @@ const FoodItem = ({ id, name, price, description, image }) => {
           setAverageRating(0);
         }
       } else {
-        alert('Lỗi khi gửi feedback');
+        const errorData = await response.json();
+        toast.error(`Error: ${errorData.message}`);
       }
     } catch (err) {
-      console.error('Lỗi khi gửi feedback:', err);
+      console.error('Error', err);
+      toast.error('Failed to send feedback');
     }
   };
 
   return (
     <div className='food-item'>
-       <div className="food-item-img-container">
+      <div className="food-item-img-container">
                 <img className='food-item-image' src={url+"/images/"+image} alt={name} />
                 {
                     !cartItems[id] 
@@ -94,18 +97,18 @@ const FoodItem = ({ id, name, price, description, image }) => {
                         <img onClick={ () => addToCart(id) } src={assets.addIconGreen} alt="" />
                     </div>
                 }
-            </div>
+      </div>
 
       <div className='food-item-info'>
         <div className='food-item-name-rating' style={{ display: 'flex', alignItems: 'center' }}>
           <p>{name}</p>
-          <p style={{ marginLeft: '10px', fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-            {averageRating}/5.0&nbsp;<span style={{ color: '#FFD700', fontSize: '18px' }}>★</span>
-          </p>
         </div>
         <p className="food-item-desc">{description}</p>
         <p className="food-item-price">${price}</p>
-        <button className='view-feedback-btn' onClick={handleShowFeedback}>Xem Đánh Giá</button>
+        <button className='view-feedback-btn' onClick={handleShowFeedback}/>
+        <p>
+            {averageRating}/5.0&nbsp;<span style={{ color: '#FFD700', fontSize: '18px' }}>★</span>
+        </p>
       </div>
 
       {showFeedback && (

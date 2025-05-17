@@ -18,40 +18,11 @@ const FeedbackModal = ({ feedbacks, onClose, newFeedback, setNewFeedback, handle
     <div className="feedback-modal-overlay">
       <div className="feedback-modal">
         <button className="close-btn" onClick={onClose}>×</button>
-        <h2>Đánh giá món ăn</h2>
-
-        {/* Bộ lọc sao */}
-        <div className="filter-section">
-          <label htmlFor="starFilter">Ratting: </label>
-          <select
-            id="starFilter"
-            value={filterStar}
-            onChange={(e) => setFilterStar(e.target.value)}
-          >
-            <option value="all">Tất cả</option>
-            <option value="5">5 sao</option>
-            <option value="4">4 sao</option>
-            <option value="3">3 sao</option>
-            <option value="2">2 sao</option>
-            <option value="1">1 sao</option>
-          </select>
-        </div>
-
-        {filteredFeedbacks.length === 0 ? (
-          <p>Không có đánh giá nào phù hợp.</p>
-        ) : (
-          filteredFeedbacks.map((fb, index) => (
-            <div key={index} className="feedback-item">
-              <p><strong>{fb.ten_user}</strong> ({fb.sao} ⭐):</p>
-              <p>{fb.nhan_xet}</p>
-            </div>
-          ))
-        )}
-
+        <h2>Review Menu</h2>
         <div className="feedback-form">
-          <h3>Thêm đánh giá của bạn</h3>
+          <h3>Add your Review Star</h3>
           <div className="rating-container">
-            {[1,2,3,4,5].map((star) => (
+            {[5,4,3,2,1].map((star) => (
               <span
                 key={star}
                 className={star <= newFeedback.rating ? 'star selected' : 'star'}
@@ -64,11 +35,46 @@ const FeedbackModal = ({ feedbacks, onClose, newFeedback, setNewFeedback, handle
           <textarea
             value={newFeedback.comment}
             onChange={(e) => setNewFeedback({ ...newFeedback, comment: e.target.value })}
-            placeholder="Nhận xét của bạn"
+            placeholder="Enter your feedback here..."
             className="comment-input"
           />
-          <button className="submit-btn" onClick={handleAddFeedback}>Gửi Đánh Giá</button>
+          <button className="submit-btn" onClick={handleAddFeedback}>Send Your Feedback</button>
         </div>
+        <div className="filter-section">
+          <span className="filter-label">Filter Reviews: </span>
+          <div className="star-filter-buttons">
+            <button 
+              className={`filter-btn ${filterStar === "all" ? "active" : ""}`} 
+              onClick={() => setFilterStar("all")}
+            >
+              All ({feedbacks.length})
+            </button>
+            
+            {[5, 4, 3, 2, 1].map(starValue => {
+              const count = feedbacks.filter(fb => fb.sao === starValue).length;
+              return (
+                <button 
+                  key={starValue}
+                  className={`filter-btn ${filterStar === starValue.toString() ? "active" : ""}`}
+                  onClick={() => setFilterStar(starValue.toString())}
+                >
+                  {starValue} <span className="star-icon">★</span> ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+            <h3>10 latest reviews</h3>
+        {filteredFeedbacks.length === 0 ? (
+          <p>:) Don't have any review yet</p>
+        ) : (
+          filteredFeedbacks.map((fb, index) => index < 10 ? (
+            <div key={index} className="feedback-item">
+              <p><strong>{fb.ten_user}</strong> ({fb.sao} ⭐):</p>
+              <p>{fb.nhan_xet}</p>
+            </div>
+          ): null)
+        )}
       </div>
     </div>
   );

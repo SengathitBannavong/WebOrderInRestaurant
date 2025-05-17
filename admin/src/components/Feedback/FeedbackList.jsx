@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import './FeedbackList.css';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import './FeedbackList.css';
+
 
 const FeedbackList = ({ url }) => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -11,7 +11,7 @@ const FeedbackList = ({ url }) => {
       const response = await axios.get(`${url}/api/feedback`);
       setFeedbacks(response.data);
     } catch (error) {
-      toast.error("Lỗi khi lấy dữ liệu feedback");
+      toast.error("Error fetching feedbacks");
     }
   };
 
@@ -19,13 +19,13 @@ const FeedbackList = ({ url }) => {
     try {
       const response = await axios.delete(`${url}/api/feedback/${feedbackId}`);
       if (response.data.success) {
-        toast.success("Xóa đánh giá thành công");
+        toast.success("Feedback deleted successfully");
         fetchFeedbacks();
       } else {
-        toast.error("Lỗi khi xóa");
+        toast.error("Failed to delete feedback");
       }
     } catch (err) {
-      toast.error("Lỗi khi xóa feedback");
+      toast.error("Error deleting feedback");
     }
   };
 
@@ -53,6 +53,11 @@ const FeedbackList = ({ url }) => {
             <p onClick={() => deleteFeedback(item._id)} className="cursor">X</p>
           </div>
         ))}
+      </div>
+      <div>
+        <p className="list-table-format title">
+          <b>Note:</b> Click on the "X" to delete the feedback.
+        </p>
       </div>
     </div>
   );

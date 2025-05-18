@@ -23,17 +23,17 @@ const Cart = () => {
             return;
         }
         try {
-            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            const res = await axios.get(`${url}/api/promo/code/${code}/validate`);
             if (res.data.success && res.data.data) {
                 setDiscount(res.data.data.discount);
                 setPromoError('');
             } else {
                 setDiscount(0);
-                setPromoError('Invalid promo code');
+                setPromoError('Invalid promo code or full capacity');
             }
         } catch (err) {
             setDiscount(0);
-            setPromoError('Invalid promo code');
+            setPromoError(res.data.message || 'Error validating promo code');
         }
     };
 

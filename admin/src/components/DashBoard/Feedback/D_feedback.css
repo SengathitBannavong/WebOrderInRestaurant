@@ -212,3 +212,49 @@
     display: none; /* Hide comments on mobile */
   }
 }
+
+.feedback-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+  margin-bottom: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eaeaea;
+}
+
+.view-all-feedbacks {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.25);
+}
+
+.view-all-feedbacks:hover {
+  background-color: #3a7bc8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.35);
+}
+
+.view-all-feedbacks:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(74, 144, 226, 0.25);
+}
+
+/* Add a small arrow icon */
+.view-all-feedbacks::after {
+  content: "→";
+  margin-left: 8px;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.view-all-feedbacks:hover::after {
+  transform: translateX(3px);
+}

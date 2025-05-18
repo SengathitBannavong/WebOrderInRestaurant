@@ -38,10 +38,10 @@ const FeedbackList = ({ url }) => {
       <p>All Feedbacks</p>
       <div className="list-table">
         <div className="list-table-format title">
-          <b>Tên món</b>
-          <b>Người dùng</b>
-          <b>Sao</b>
-          <b>Nhận xét</b>
+          <b>Name Menu</b>
+          <b>User name</b>
+          <b>Star</b>
+          <b>Comment</b>
           <b>Action</b>
         </div>
         {feedbacks.map((item, index) => (

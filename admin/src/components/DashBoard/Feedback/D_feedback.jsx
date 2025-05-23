@@ -3,6 +3,7 @@ import { Chart, registerables } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 import './D_feedback.css';
+import { NavLink } from 'react-router-dom'
 
 // Register ChartJS components
 Chart.register(...registerables);
@@ -302,6 +303,11 @@ useEffect(() => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="feedback-link">
+        <NavLink to="/feedback" className="view-all-feedbacks">
+          View All Feedbacks (You can delete them here)
+        </NavLink>
       </div>
     </div>
   );

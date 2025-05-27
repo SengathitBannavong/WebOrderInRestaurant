@@ -1,21 +1,26 @@
 import "./navbar.css";
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { assets } from "../../assets/assets.js";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext.jsx";
 
-
-
-const Navbar = () =>{
+const Navbar = ({setShowLogin}) => {
     const navigate = useNavigate();
+    const { cartItems, token, setToken, clearCart } = useContext(StoreContext);
+    
     const account = () => {
         navigate("/account")
     }
     const myorders = () => {
         navigate("/myorders")
     }
-    const { cartItems } = useContext(StoreContext);
+    
+    // ✅ Navigate to logout page instead of immediate logout
+    const logout = () => {
+        navigate("/logout");
+    }
+    
     const cartItemCount = Object.values(cartItems).reduce((sum, qty) => sum + qty, 0);
 
     return(
@@ -52,21 +57,25 @@ const Navbar = () =>{
                         }
                     </Link>
                 </div>
-                <div className="navbar-profile">
-                    <img src={assets.profile_icon} alt="" />
-                    <ul className="navbar-profile-dropdown">
-                        <li onClick={account}>< img src={assets.manage_account_icon} alt="" /><p>Manage</p></li>
-                        <hr />
-                        <li onClick={myorders}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
-                        <hr />
-                        <li><img src={assets.logout_icon} alt="" /><p>Logout</p></li>
-                    </ul>
-                </div>
+                
+                {/* Hiển thị sign in button hoặc profile dropdown dựa vào token */}
+                {!token 
+                    ? <button onClick={() => setShowLogin(true)}>sign in</button>
+                    : <div className="navbar-profile">
+                        <img src={assets.profile_icon} alt="" />
+                        <ul className="navbar-profile-dropdown">
+                            <li onClick={account}><img src={assets.manage_account_icon} alt="" /><p>Manage</p></li>
+                            <hr />
+                            <li onClick={myorders}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
+                            <hr />
+                            {/* ✅ Navigate to logout page */}
+                            <li onClick={logout}><img src={assets.logout_icon} alt="" /><p>Logout</p></li>
+                        </ul>
+                    </div>
+                }
             </div>
-            {/* In future is should have sign in and register button on this*/}
-            {/* If already login it's will show Orders,Account profile */}
         </div>
     )
-};
+}
 
 export default Navbar;

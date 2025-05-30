@@ -5,7 +5,7 @@ const port = process.env.PORT || 4000;
 
 // MongoDB connection - Connect immediately like test-server.js
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://nutkimheng:Kimheng9@cluster0.wwsd2.mongodb.net/MY-FOOD-WEBSITE';
-const JWT_SECRET = process.env.JWT_SECRET || 'nutkimheng_food_website_secret_123456789';
+const JWT_SECRET = process.env.JWT_SECRET || 'random#secret';
 
 // Connect to MongoDB immediately when config is imported
 mongoose.connect(MONGODB_URI)

@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
-import './LoginPopup.css'
-import { assets } from '../../assets/assets'
-import { StoreContext } from '../../context/StoreContext'
 import axios from "axios"
+import { useContext, useState } from 'react'
+import { toast } from "react-toastify"
+import { StoreContext } from '../../context/StoreContext'
+import './LoginPopup.css'
 
 const LoginPopup = ({setShowLogin}) => {
 
@@ -58,6 +58,7 @@ const LoginPopup = ({setShowLogin}) => {
             } else {
                 newUrl += "/api/user/register"
             }
+            console.log("Calling API:", newUrl, data);
 
             const response = await axios.post(newUrl, data);
 
@@ -73,7 +74,7 @@ const LoginPopup = ({setShowLogin}) => {
                 // ✅ Reset form
                 setData({ name:"", email:"", password:""});
                 
-                console.log("Login/Register successful!");
+                toast.success(currState === "Login" ? "Logged in successfully!" : "Account created successfully!");
             } else {
                 setError(response.data.message || "Authentication failed");
             }

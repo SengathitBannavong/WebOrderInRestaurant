@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registerUser, getUserProfile, updateUserProfile } from "../controllers/userController.js";
+import { loginUser, registerUser } from "../controllers/userController.js";
 
 
 const userRouter = express.Router();
@@ -9,8 +9,8 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 
 // Profile routes - can be protected with middleware if needed
-userRouter.get("/profile", getUserProfile);
-userRouter.put("/profile", updateUserProfile);
+// userRouter.get("/profile", getUserProfile);
+// userRouter.put("/profile", updateUserProfile);
 
-userRouter.put("/change-password", changePassword);
+// userRouter.put("/change-password", changePassword);
 export default userRouter;

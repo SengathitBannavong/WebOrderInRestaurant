@@ -44,10 +44,6 @@ const Logout = () => {
         navigate('/');
     };
 
-    const handleLogin = () => {
-        navigate('/');
-        // You can trigger login popup here if needed
-    };
 
     return (
         <Container className="logout-container">
@@ -84,14 +80,6 @@ const Logout = () => {
                         >
                             <i className="fas fa-home me-2"></i>
                             Go to Home
-                        </Button>
-                        <Button 
-                            variant="outline-primary" 
-                            onClick={handleLogin}
-                            className="login-again-btn"
-                        >
-                            <i className="fas fa-sign-in-alt me-2"></i>
-                            Login Again
                         </Button>
                     </div>
 

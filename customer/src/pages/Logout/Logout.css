@@ -94,6 +94,8 @@
 /* Buttons */
 .logout-actions {
     margin: 2rem 0;
+    display: flex;
+    justify-content: center;
 }
 
 .home-btn {

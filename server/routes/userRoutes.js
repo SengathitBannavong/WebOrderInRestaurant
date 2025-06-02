@@ -1,13 +1,16 @@
-import express from "express"
-import { getAllUsers } from "../controllers/userController.js";
+import express from "express";
+import { loginUser, registerUser } from "../controllers/userController.js";
 
-const userRouter = express.Router()
 
-// GET
-userRouter.get("/list", getAllUsers);
+const userRouter = express.Router();
 
-// // POST
-// userRouter.post("/register",registerUser)
-// userRouter.post("/login",loginUser)
+// Auth routes - no middleware needed
+userRouter.post("/register", registerUser);
+userRouter.post("/login", loginUser);
 
+// Profile routes - can be protected with middleware if needed
+// userRouter.get("/profile", getUserProfile);
+// userRouter.put("/profile", updateUserProfile);
+
+// userRouter.put("/change-password", changePassword);
 export default userRouter;

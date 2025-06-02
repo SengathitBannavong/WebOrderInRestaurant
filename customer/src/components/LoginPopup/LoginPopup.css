@@ -1,0 +1,193 @@
+.login-popup{
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: #00000090;
+    display: grid;
+}
+
+.login-popup-container{
+    place-self: center;
+    width: max(23vw,330px);
+    color: #808080;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 25px 30px;
+    border-radius: 8px;
+    font-size: 14px;
+    animation: fadeIn 0.5s;
+    position: relative;
+}
+
+/* ✅ TITLE VÀ CLOSE BUTTON */
+.login-popup-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+}
+
+.login-popup-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* ✅ CLOSE BUTTON TRONG TITLE */
+.login-popup-title-close {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.login-popup-title-close:hover {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+    transform: scale(1.1);
+}
+
+.login-popup-title-close:active {
+    transform: scale(0.9);
+}
+
+.login-popup-title-close:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ✅ ERROR MESSAGE STYLING */
+.login-popup-error {
+    color: #dc3545;
+    fontSize: 14px;
+    padding: 8px 12px;
+    backgroundColor: #f8d7da;
+    border: 1px solid #f5c6cb;
+    borderRadius: 4px;
+    marginBottom: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.login-popup-inputs{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-popup-inputs input{
+    outline: none;
+    border: 1px solid #c9c9c9;
+    padding: 10px;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+
+.login-popup-inputs input:focus {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
+
+.login-popup-inputs input:disabled {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ✅ SUBMIT BUTTON */
+.login-popup-submit-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    background-color: tomato;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.login-popup-submit-btn:hover:not(:disabled) {
+    background-color: #ff5722;
+    transform: translateY(-1px);
+}
+
+.login-popup-submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.login-popup-condition{
+    display: flex;
+    align-items: start;
+    gap: 8px;
+    margin-top: -15px;
+}
+
+.login-popup-condition input{
+    margin-top: 5px;
+}
+
+.login-popup-condition input:disabled {
+    opacity: 0.5;
+}
+
+/* ✅ SWITCH LINK STYLING */
+.login-popup-switch {
+    color: tomato;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.login-popup-switch:hover {
+    color: #ff5722;
+    text-decoration: underline;
+}
+
+/* ✅ LOADING STATE */
+.login-popup-container.loading {
+    pointer-events: none;
+}
+
+.login-popup-container.loading * {
+    opacity: 0.7;
+}
+
+/* ✅ ANIMATIONS */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ✅ RESPONSIVE */
+@media (max-width: 768px) {
+    .login-popup-container {
+        width: max(90vw, 300px);
+        padding: 20px;
+        gap: 20px;
+    }
+    
+    .login-popup-title h2 {
+        font-size: 1.3rem;
+    }
+}

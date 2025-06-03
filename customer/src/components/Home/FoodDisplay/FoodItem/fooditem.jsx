@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
-import './FoodItem.css';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { assets } from '../../../../assets/assets';
 import { StoreContext } from '../../../../context/StoreContext';
 import FeedbackModal from '../FeedbackModal/FeedbackModal';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import './FoodItem.css';
 
 const FoodItem = ({ id, name, price, description, image }) => {
-  const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
+  const { cartItems, addToCart, removeFromCart, url, token } = useContext(StoreContext);
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbacks, setFeedbacks] = useState([]);
   const [newFeedback, setNewFeedback] = useState({ rating: 0, comment: '' });
@@ -48,43 +48,47 @@ const FoodItem = ({ id, name, price, description, image }) => {
 
   // Gửi feedback mới
   const handleAddFeedback = async () => {
-    try {
-      const response = await fetch(`${url}/api/feedback`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ten_mon: name,
-          sao: Number(newFeedback.rating),
-          nhan_xet: newFeedback.comment,
-        }),
-      });
+    if(token){
+      try {
+        const response = await fetch(`${url}/api/feedback`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ten_mon: name,
+            sao: Number(newFeedback.rating),
+            nhan_xet: newFeedback.comment,
+          }),
+        });
 
-      if (response.ok) {
-        toast.success('Send feedback Completed');
-        setNewFeedback({ rating: 0, comment: '' });
-        setShowFeedback(false);
+        if (response.ok) {
+          toast.success('Send feedback Completed');
+          setNewFeedback({ rating: 0, comment: '' });
+          setShowFeedback(false);
 
-        // Cập nhật lại feedbacks sau khi gửi thành công
-        const updatedFeedbacksResponse = await fetch(`${url}/api/feedback`);
-        const updatedFeedbacks = await updatedFeedbacksResponse.json();
-        const filteredFeedbacks = updatedFeedbacks.filter(fb => fb.ten_mon === name);
-        setFeedbacks(filteredFeedbacks);
+          // Cập nhật lại feedbacks sau khi gửi thành công
+          const updatedFeedbacksResponse = await fetch(`${url}/api/feedback`);
+          const updatedFeedbacks = await updatedFeedbacksResponse.json();
+          const filteredFeedbacks = updatedFeedbacks.filter(fb => fb.ten_mon === name);
+          setFeedbacks(filteredFeedbacks);
 
-        if (filteredFeedbacks.length > 0) {
-          const totalStars = filteredFeedbacks.reduce((sum, fb) => sum + Number(fb.sao), 0);
-          setAverageRating((totalStars / filteredFeedbacks.length).toFixed(1));
+          if (filteredFeedbacks.length > 0) {
+            const totalStars = filteredFeedbacks.reduce((sum, fb) => sum + Number(fb.sao), 0);
+            setAverageRating((totalStars / filteredFeedbacks.length).toFixed(1));
+          } else {
+            setAverageRating(0);
+          }
         } else {
-          setAverageRating(0);
+          const errorData = await response.json();
+          toast.error(`Error: ${errorData.message}`);
         }
-      } else {
-        const errorData = await response.json();
-        toast.error(`Error: ${errorData.message}`);
+      } catch (err) {
+        console.error('Error', err);
+        toast.error('Failed to send feedback');
       }
-    } catch (err) {
-      console.error('Error', err);
-      toast.error('Failed to send feedback');
+    }else{
+      toast.error('You need to login to send feedback');
     }
   };
 

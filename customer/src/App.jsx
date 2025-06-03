@@ -17,14 +17,14 @@ function App() {
     {showLogin?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
       <div className="app">
         <ToastContainer/>
-         <Navbar setShowLogin={setShowLogin} />
+        <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/cart" element={<Cart/>} />
           <Route path="/order" element={<Order/>} />
           <Route path="/myorders" element={<MyOrders/>} />
           <Route path="/account" element={<Account/>} />
-           <Route path="/logout" element={<Logout/>} />
+          <Route path="/logout" element={<Logout/>} />
         </Routes>
       </div>
       <Footer />

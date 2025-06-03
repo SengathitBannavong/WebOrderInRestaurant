@@ -133,19 +133,25 @@ const Order = () => {
             deliveryFee,
         }
 
-        try {
-            const response = await axios.post(`${url}/api/order/place`, orderData);
-            if (response.data.success) {
-                toast.success("Order placed successfully!");
-                clearCart();
-                setShowReview(false);
-                navigate('/myorders');
-            } else {
-                toast.error(response.data.message || "Failed to place order");
+        if(token){
+            try {
+                const response = await axios.post(`${url}/api/order/place`, orderData);
+                if (response.data.success) {
+                    toast.success("Order placed successfully!");
+                    clearCart();
+                    setShowReview(false);
+                    navigate('/myorders');
+                } else {
+                    toast.error(response.data.message || "Failed to place order");
+                }
+            } catch (err) {
+                toast.error("Error placing order");
+            } finally {
+                setLoading(false);
             }
-        } catch (err) {
-            toast.error("Error placing order");
-        } finally {
+        }
+        else {
+            toast.error("Please login to place an order");
             setLoading(false);
         }
     };

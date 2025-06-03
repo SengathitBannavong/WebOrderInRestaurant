@@ -1,90 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import './account.css';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { Button, Card, Container } from 'react-bootstrap';
 import AccountDetails from '../../components/Accounts/Accounts_Detail/account_details.jsx';
 import OrderHistory from '../../components/Accounts/OrderHistory/orderhistory.jsx';
+import { StoreContext } from '../../context/StoreContext.jsx';
+import './account.css';
 
 const Account = () => {
+    const { url, token } = useContext(StoreContext);
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [token, setToken] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editFormData, setEditFormData] = useState({});
     const [formErrors, setFormErrors] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
 
-    // API URL - adjust based on your server
-    const API_URL = "http://localhost:4000";
+    
 
     useEffect(() => {
-        // Get token from localStorage
-        const storedToken = localStorage.getItem('token');
-        setToken(storedToken);
-        
-        if (storedToken) {
-            fetchUserProfile(storedToken);
-            fetchUserOrders(storedToken);
-        } else {
-            setLoading(false);
-        }
-    }, []);
-
-    // Fetch user profile from MongoDB
-    const fetchUserProfile = async (userToken) => {
-        try {
-            const response = await fetch(`${API_URL}/api/user/profile`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': userToken
-                }
-            });
-
-            const data = await response.json();
-            
-            if (data.success) {
-                setUser(data.user);
-                setEditFormData(data.user);
-                console.log('✅ User profile loaded:', data.user);
-            } else {
-                console.error('❌ Failed to fetch profile:', data.message);
-                // If token is invalid, clear it
-                if (response.status === 401) {
-                    localStorage.removeItem('token');
-                    setToken(null);
-                }
+        const fetchUserData = async () => {
+            try {
+                const { data } = await axios.get(`${url}/api/user/profile`, {
+                headers: { token },
+                });
+                console.log('User Data:', data);
+                return data.success ? data.user : null;
+            } catch (err) {
+                console.error(err);
+                return null;
             }
-        } catch (error) {
-            console.error('💥 Error fetching user profile:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
 
-    // Fetch user orders (you'll need to create this endpoint)
-    const fetchUserOrders = async (userToken) => {
-        try {
-            // This endpoint doesn't exist yet - you can add it later
-            const response = await fetch(`${API_URL}/api/user/orders`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': userToken
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success) {
-                    setOrders(data.orders);
-                }
+        (async () => {
+            console.log("Token:", token);
+            const rep = await fetchUserData();
+            console.log("Response:", rep);
+            let userData;
+            if(!rep) {
+                userData = {
+                    name: 'John Doe',
+                    email: 'john.doe@example.com',
+                    phone: '+1 234 567 890',
+                    address: '123 Main St, City, Country',
+                    memberSince: '2023-01-15'
+                };
+            }else{
+                userData = {
+                    name: rep.name,
+                    email: rep.email,
+                    phone: rep.phone,
+                    address: rep.address,
+                    memberSince: new Date(rep.createdAt).toLocaleDateString('en-US')
+                };
             }
-        } catch (error) {
-            console.log('Orders endpoint not available yet, using mock data');
-            // Fallback to mock data for now
-            const mockOrders = [
+
+            const orderData = [
                 {
                     id: 'ORD-001',
                     date: '2023-05-20',
@@ -100,7 +72,7 @@ const Account = () => {
                     id: 'ORD-002',
                     date: '2023-06-15',
                     total: 32.75,
-                    status: 'Pending',
+                    status: 'In Complete',
                     items: [
                         { name: 'Margherita Pizza', quantity: 1, price: 14.95 },
                         { name: 'Garlic Bread', quantity: 1, price: 4.50 },
@@ -108,9 +80,13 @@ const Account = () => {
                     ]
                 }
             ];
-            setOrders(mockOrders);
-        }
-    };
+
+            setUser(userData);
+            setOrders(orderData);
+            setEditFormData(userData);
+            setLoading(false);
+        })();
+    }, [token]);
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -129,13 +105,6 @@ const Account = () => {
             ...editFormData,
             [name]: value
         });
-        // Clear error for this field when user starts typing
-        if (formErrors[name]) {
-            setFormErrors({
-                ...formErrors,
-                [name]: ''
-            });
-        }
     };
 
     const validateForm = () => {
@@ -144,12 +113,13 @@ const Account = () => {
         if (!editFormData.email?.trim()) errors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(editFormData.email)) 
             errors.email = 'Email format is invalid';
+        if (!editFormData.phone?.trim()) errors.phone = 'Phone is required';
+        if (!editFormData.address?.trim()) errors.address = 'Address is required';
         
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
-    // Update user profile in MongoDB
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -157,48 +127,17 @@ const Account = () => {
 
         try {
             setLoading(true);
-            
-            const response = await fetch(`${API_URL}/api/user/profile`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': token
-                },
-                body: JSON.stringify({
-                    name: editFormData.name,
-                    email: editFormData.email,
-                    phone: editFormData.phone || '',
-                    address: editFormData.address || ''
-                })
-            });
-
-            const data = await response.json();
-            
-            if (data.success) {
-                setUser(data.user);
-                setIsEditing(false);
-                setSaveSuccess(true);
-                setTimeout(() => setSaveSuccess(false), 3000);
-                console.log('✅ Profile updated successfully');
-            } else {
-                setFormErrors({ submit: data.message || 'Failed to update profile' });
-                console.error('❌ Profile update failed:', data.message);
-            }
-            
+            await new Promise(resolve => setTimeout(resolve, 800));
+            setUser(editFormData);
+            setIsEditing(false);
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 3000);
         } catch (error) {
-            console.error('💥 Error updating profile:', error);
-            setFormErrors({ submit: 'Network error. Please try again.' });
+            console.error('Error updating profile:', error);
+            setFormErrors({ submit: 'Failed to update profile. Please try again.' });
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setToken(null);
-        setUser(null);
-        setOrders([]);
-        console.log('👋 User logged out');
     };
 
     if (loading) {
@@ -229,30 +168,23 @@ const Account = () => {
 
     return (
         <Container className="account-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <h1>My Account</h1>
-                <Button variant="outline-secondary" onClick={handleLogout}>
-                    <i className="fas fa-sign-out-alt"></i> Logout
-                </Button>
-            </div>
-            
-            <AccountDetails
-                user={user}
-                isEditing={isEditing}
-                editFormData={editFormData}
-                formErrors={formErrors}
-                saveSuccess={saveSuccess}
-                handleInputChange={handleInputChange}
-                handleSubmit={handleSubmit}
-                handleCancelEdit={handleCancelEdit}
-                handleEditClick={handleEditClick}
-            />
-            
-            <OrderHistory
-                orders={orders}
-                selectedOrder={selectedOrder}
-                setSelectedOrder={setSelectedOrder}
-            />
+            <h1>My Account</h1>
+                <AccountDetails
+                    user={user}
+                    isEditing={isEditing}
+                    editFormData={editFormData}
+                    formErrors={formErrors}
+                    saveSuccess={saveSuccess}
+                    handleInputChange={handleInputChange}
+                    handleSubmit={handleSubmit}
+                    handleCancelEdit={handleCancelEdit}
+                    handleEditClick={handleEditClick}
+                />
+                <OrderHistory
+                    orders={orders}
+                    selectedOrder={selectedOrder}
+                    setSelectedOrder={setSelectedOrder}
+                />
         </Container>
     );
 };

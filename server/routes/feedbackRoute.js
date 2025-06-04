@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
     });
 
     await feedback.save();
-    console.log("Đã lưu feedback:", feedback);
     res.status(201).json({ message: "Sent feedback successfully"});
 
   } catch (error) {

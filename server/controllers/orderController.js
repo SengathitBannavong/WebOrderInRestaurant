@@ -65,5 +65,19 @@ const removeOrderById = async (req, res) => {
     }
 };
 
-export { getAllOrders, placeOrder, removeOrderById, userOrders };
+const historyOrders = async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        if (!userId) {
+            return res.status(400).json({ success: false, message: "User ID is required" });
+        }
+        const orders = await orderModel.find({ userId, status: "done" });
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error retrieving history orders" });
+    }
+};
+
+export { getAllOrders, historyOrders, placeOrder, removeOrderById, userOrders };
 

@@ -29,15 +29,17 @@ const Account = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                console.log("Fetching user data...");
-                console.log("Token:", token);
-                console.log("URL:", `${url}/api/user/profile`);
-                
+
+                if(!token) {
+                    console.error('No token found, user is not authenticated');
+                    setLoading(false);
+                    return;
+                }
+
                 const { data } = await axios.get(`${url}/api/user/profile`, {
                     headers: { token },
                 });
                 
-                console.log('User Data Response:', data);
                 
                 if (data.success && data.user) {
                     const userData = {
@@ -52,7 +54,6 @@ const Account = () => {
                     
                     setUser(userData);
                     setEditFormData(userData);
-                    console.log('User data set successfully:', userData);
                 } else {
                     console.error('API response indicates failure:', data);
                     // Fallback to mock data
@@ -85,20 +86,12 @@ const Account = () => {
 
             // Fetch user orders
             try {
-                console.log("Fetching user orders...");
-                console.log("Orders API URL:", `${url}/api/user/orders`);
                 
-                const ordersResponse = await axios.get(`${url}/api/user/orders`, {
+                const ordersResponse = await axios.get(`${url}/api/order/history`, {
                     headers: { token },
                 });
-                
-                console.log('Orders Response:', ordersResponse.data);
-                console.log('Orders array:', ordersResponse.data.orders);
-                console.log('Orders length:', ordersResponse.data.orders?.length || 0);
-                
-                if (ordersResponse.data.success && ordersResponse.data.orders) {
-                    setOrders(ordersResponse.data.orders);
-                    console.log('Orders set successfully:', ordersResponse.data.orders);
+                if (ordersResponse.data.success) {
+                    setOrders(ordersResponse.data.data || []);
                 } else {
                     console.log('No orders found for this user');
                     setOrders([]);
@@ -192,9 +185,6 @@ const Account = () => {
                 address: editFormData.address.trim()
             };
             
-            console.log('Sending update request:', updateData);
-            console.log('API URL:', `${url}/api/user/profile`);
-            console.log('Token:', token);
             
             // Send PUT request to update profile
             const response = await axios.put(`${url}/api/user/profile`, updateData, {
@@ -204,8 +194,6 @@ const Account = () => {
                 }
             });
             
-            console.log('Update response:', response.data);
-
             if (response.data.success) {
                 // Update local state
                 const updatedUser = {
@@ -219,7 +207,6 @@ const Account = () => {
                 setSaveSuccess(true);
                 
                 setTimeout(() => setSaveSuccess(false), 3000);
-                console.log('Profile updated successfully');
             } else {
                 throw new Error(response.data.message || 'Failed to update profile');
             }
@@ -324,7 +311,6 @@ const Account = () => {
                 newPassword: passwordFormData.newPassword
             };
             
-            console.log('Sending change password request');
             
             // Send PUT request to change password
             const response = await axios.put(`${url}/api/user/change-password`, passwordData, {
@@ -334,7 +320,6 @@ const Account = () => {
                 }
             });
             
-            console.log('Change password response:', response.data);
 
             if (response.data.success) {
                 setPasswordSuccess(true);
@@ -350,7 +335,6 @@ const Account = () => {
                     setShowChangePassword(false);
                 }, 3000);
                 
-                console.log('Password changed successfully');
             } else {
                 throw new Error(response.data.message || 'Failed to change password');
             }

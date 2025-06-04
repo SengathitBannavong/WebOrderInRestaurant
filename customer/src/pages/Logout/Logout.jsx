@@ -19,7 +19,6 @@ const Logout = () => {
             clearCart();
             setToken("");
             
-            console.log("User automatically logged out");
         };
 
         // Perform logout immediately

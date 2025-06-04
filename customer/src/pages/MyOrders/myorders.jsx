@@ -32,7 +32,6 @@ const MyOrders = () => {
 
     const handleCancelOrder = async (orderId) => {
         const response = await removeOrderById(orderId);
-        console.log(response);
         if (response) {
             await fetchOrderList();
             toast.success("Order cancelled successfully");
@@ -72,52 +71,59 @@ const MyOrders = () => {
             <h2>My Orders</h2>
             <div className="container">
             {
-                listOrder.length > 0 ? (
-                listOrder.map((order, index) => {
-                    // Remove the userId check or use proper check if needed
-                    return (
-                        <div key={index} className='my-orders-order'>
-                            <img src={assets.parcel_icon} alt="" />
-                            <p>
-                            {
-                                order.items && order.items.length >= 1
-                                ? order.items.map((item, idx) => {
-                                    // Handle case where item is not fully expanded from server
-                                    const itemName = item.name || 'Item';
-                                    const itemQuantity = item.quantity || 1;
-                                    
-                                    if (idx === order.items.length - 1) {
-                                        return `${itemName} x ${itemQuantity}`;
-                                    } else {
-                                        return `${itemName} x ${itemQuantity}, `;
+                listOrder.filter(order => {
+                    const status = order.status?.toLowerCase();
+                    return status !== 'done';
+                    }).length > 0 ? (
+                    listOrder
+                        .filter(order => {
+                            const status = order.status?.toLowerCase();
+                            return status !== 'done';
+                        })
+                        .map((order, index) => {
+                            return (
+                                <div key={index} className='my-orders-order'>
+                                    <img src={assets.parcel_icon} alt="" />
+                                    <p>
+                                    {
+                                        order.items && order.items.length >= 1
+                                        ? order.items.map((item, idx) => {
+                                            // Handle case where item is not fully expanded from server
+                                            const itemName = item.name || 'Item';
+                                            const itemQuantity = item.quantity || 1;
+                                            
+                                            if (idx === order.items.length - 1) {
+                                                return `${itemName} x ${itemQuantity}`;
+                                            } else {
+                                                return `${itemName} x ${itemQuantity}, `;
+                                            }
+                                        })
+                                        : "No items"
                                     }
-                                })
-                                : "No items"
-                            }
-                            </p>
-                            <p className='red'>{order.address?.status || 'N/A'}</p>
-                            <p>${order.amount ? order.amount.toFixed(2) : '0.00'}</p>
-                            <p>Items: {order.items ? order.items.length : 0}</p>
-                            <p><span>&#x25cf;</span><b>{order.status || 'Unknown'}</b></p>
-                            {
-                                order.status === "Pending"
-                                ? (
-                                    <button onClick={() => showCancelConfirmation(order._id)}>
-                                        Cancel Order
-                                    </button>
-                                )
-                                :(
-                                    <p className='cancel-order'>
-                                        Can't Cancel
                                     </p>
-                                )
-                            }
-                        </div>
-                    );
-                })
-            ) : (
-                <p>You don't have any orders yet.</p>
-            )
+                                    <p className='red'>{order.address?.status || 'N/A'}</p>
+                                    <p>${order.amount ? order.amount.toFixed(2) : '0.00'}</p>
+                                    <p>Items: {order.items ? order.items.length : 0}</p>
+                                    <p><span>&#x25cf;</span><b>{order.status || 'Unknown'}</b></p>
+                                    {
+                                        order.status === "Pending"
+                                        ? (
+                                            <button onClick={() => showCancelConfirmation(order._id)}>
+                                                Cancel Order
+                                            </button>
+                                        )
+                                        :(
+                                            <p className='cancel-order'>
+                                                Can't Cancel
+                                            </p>
+                                        )
+                                    }
+                                </div>
+                            );
+                        })
+                ) : (
+                    <p>You don't have any active orders.</p>
+                )
             }
             </div>
             

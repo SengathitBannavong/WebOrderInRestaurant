@@ -26,14 +26,14 @@ const OrderHistory = ({ orders, selectedOrder, setSelectedOrder }) => {
                 </div>
             ) : (
                 <ListGroup variant="flush">
-                {orders.map((order) => (
-                    <ListGroup.Item key={order.id} className="order-item">
+                {orders.map((order,index) => (
+                    <ListGroup.Item key={index} className="order-item">
                         <div className="order-main-container">
                         <div className="order-summary">
                             <div className="order-header">
-                            <h6 className="order-id">Order <span className="order-number">#{order.orderId || order.id}</span></h6>
-                            <span className={`order-status status-${order.status?.toLowerCase() || 'pending'}`}>
-                                {order.status || 'Pending'}
+                            <h6 className="order-id">Order <span className="order-number">#{index+1}</span></h6>
+                            <span className={`order-status status-completed`}>
+                                Done
                             </span>
                             </div>
                             <div className="order-meta">

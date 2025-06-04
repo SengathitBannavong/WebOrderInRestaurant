@@ -1,9 +1,8 @@
+import bcrypt from "bcrypt"; // THÊM IMPORT CHO BCRYPT
 import express from "express";
-import { loginUser, registerUser, getUserProfile } from "../controllers/userController.js";
+import { getUserProfile, loginUser, registerUser } from "../controllers/userController.js";
 import authMiddleware from "../middleware/auth.js";
 import userModel from "../model/userModel.js";
-import orderModel from "../model/orderModel.js"; // THÊM IMPORT CHO ORDER
-import bcrypt from "bcrypt"; // THÊM IMPORT CHO BCRYPT
 
 const userRouter = express.Router();
 
@@ -50,79 +49,6 @@ userRouter.get("/profile-with-password", authMiddleware, async (req, res) => {
     }
 });
 
-// GET user orders - ROUTE CHO ORDERS
-userRouter.get("/orders", authMiddleware, async (req, res) => {
-    try {
-        const userId = req.body.userId; // from authMiddleware
-        
-        console.log('=== ORDERS API CALLED ===');
-        console.log('Fetching orders for user:', userId);
-        console.log('User ID type:', typeof userId);
-        
-        if (!userId) {
-            console.log('No userId found in request');
-            return res.status(400).json({
-                success: false,
-                message: 'User ID not found',
-                orders: []
-            });
-        }
-        
-        // Find all orders for this user
-        const orders = await orderModel.find({ userId: userId })
-            .sort({ createdAt: -1 }) // Sort by newest first
-            .lean(); // Optimize performance
-        
-        console.log('Database query result:');
-        console.log('Orders found:', orders.length);
-        console.log('Orders data:', JSON.stringify(orders, null, 2));
-        
-        if (!orders || orders.length === 0) {
-            console.log('No orders found in database for user:', userId);
-            return res.json({
-                success: true,
-                message: 'No orders found',
-                orders: []
-            });
-        }
-        
-        // Format data for frontend
-        const formattedOrders = orders.map(order => {
-            console.log('Processing order:', order._id);
-            return {
-                id: order._id,
-                orderId: order.orderId || `ORD-${order._id.toString().slice(-6).toUpperCase()}`,
-                date: order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US') : '',
-                total: order.amount || order.total || 0,
-                status: order.status || 'Pending',
-                items: order.items ? order.items.map(item => ({
-                    name: item.name || 'Unknown Item',
-                    quantity: item.quantity || 1,
-                    price: item.price || 0
-                })) : [],
-                address: order.address || {},
-                payment: order.payment || false,
-                createdAt: order.createdAt
-            };
-        });
-        
-        console.log(`Formatted ${formattedOrders.length} orders for frontend`);
-        console.log('Formatted orders:', JSON.stringify(formattedOrders, null, 2));
-        
-        res.json({
-            success: true,
-            orders: formattedOrders
-        });
-        
-    } catch (error) {
-        console.error('Error fetching user orders:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error: ' + error.message,
-            orders: []
-        });
-    }
-});
 
 // PUT update user profile
 userRouter.put("/profile", authMiddleware, async (req, res) => {
@@ -130,8 +56,6 @@ userRouter.put("/profile", authMiddleware, async (req, res) => {
         const { name, email, phone, address } = req.body;
         const userId = req.body.userId; // from authMiddleware
         
-        console.log('Updating profile for user:', userId);
-        console.log('Update data:', { name, email, phone, address });
         
         // Validation
         if (!name || !email || !phone || !address) {
@@ -200,7 +124,6 @@ userRouter.put("/profile", authMiddleware, async (req, res) => {
             });
         }
         
-        console.log('Profile updated successfully:', updatedUser);
         
         res.json({
             success: true,
@@ -241,7 +164,6 @@ userRouter.put("/change-password", authMiddleware, async (req, res) => {
         const { currentPassword, newPassword } = req.body;
         const userId = req.body.userId; // from authMiddleware
         
-        console.log('Change password request for user:', userId);
         
         // Validation
         if (!currentPassword || !newPassword) {
@@ -292,8 +214,6 @@ userRouter.put("/change-password", authMiddleware, async (req, res) => {
             password: hashedNewPassword,
             updatedAt: new Date()
         });
-        
-        console.log('Password changed successfully for user:', userId);
         
         res.json({
             success: true,

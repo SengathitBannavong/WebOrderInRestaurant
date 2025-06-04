@@ -95,7 +95,7 @@ const StoreContextProvider = (props) => {
         getTotalCartAmount: () => getTotalCartAmount(cartItems, food_list),
         fetchOrders: () => fetchOrders(url),
         setToken: updateToken,
-        fetchOrderById: (id) => fetchOrderById(url, id),
+        fetchOrderById: (token) => fetchOrderById(url, token),
         removeOrderById: (id) => removeOrderById(url, id),
         loadUserData: () => loadUserData(token),
         loadCartData: () => loadCartData(token),

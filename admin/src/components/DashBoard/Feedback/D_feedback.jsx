@@ -304,14 +304,11 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-<<<<<<< HEAD
       <div className="feedback-link">
         <NavLink to="/feedback" className="view-all-feedbacks">
           View All Feedbacks (You can delete them here)
         </NavLink>
       </div>
-=======
->>>>>>> b7ad3c3 (Add feedback dashboard with statistics and charts; integrate axios for data fetching)
     </div>
   );
 };

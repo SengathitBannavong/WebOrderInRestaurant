@@ -11,7 +11,7 @@ export const fetchOrders = async (url) => {
 }
 
 export const fetchOrderById = async (url, id) => {
-    const response = await axios.get(`${url}/api/order/${id}`);
+    const response = await axios.get(`${url}/api/order/`,{headers: {token: id}});
     if(response.data.success) {
         return response.data.data;
     }else {

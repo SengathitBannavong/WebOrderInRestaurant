@@ -123,7 +123,7 @@ const Order = () => {
         }
 
         let orderData = {
-            userId: token,
+            userId: "",
             address: data_address,
             items: orderItems,
             amount: Math.max(0, subtotal + deliveryFee - validatedDiscount),
@@ -135,7 +135,7 @@ const Order = () => {
 
         if(token){
             try {
-                const response = await axios.post(`${url}/api/order/place`, orderData);
+                const response = await axios.post(`${url}/api/order/place`, orderData, {headers: {token: token}});
                 if (response.data.success) {
                     toast.success("Order placed successfully!");
                     clearCart();

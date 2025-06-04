@@ -16,6 +16,15 @@ const Account = () => {
     const [editFormData, setEditFormData] = useState({});
     const [formErrors, setFormErrors] = useState({});
     const [saveSuccess, setSaveSuccess] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
+    const [passwordFormData, setPasswordFormData] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
+    const [passwordErrors, setPasswordErrors] = useState({});
+    const [passwordLoading, setPasswordLoading] = useState(false);
+    const [passwordSuccess, setPasswordSuccess] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -77,11 +86,15 @@ const Account = () => {
             // Fetch user orders
             try {
                 console.log("Fetching user orders...");
+                console.log("Orders API URL:", `${url}/api/user/orders`);
+                
                 const ordersResponse = await axios.get(`${url}/api/user/orders`, {
                     headers: { token },
                 });
                 
                 console.log('Orders Response:', ordersResponse.data);
+                console.log('Orders array:', ordersResponse.data.orders);
+                console.log('Orders length:', ordersResponse.data.orders?.length || 0);
                 
                 if (ordersResponse.data.success && ordersResponse.data.orders) {
                     setOrders(ordersResponse.data.orders);
@@ -93,9 +106,11 @@ const Account = () => {
             } catch (ordersError) {
                 console.error('Error fetching orders:', ordersError);
                 console.error('Orders error details:', ordersError.response?.data);
+                console.error('Orders error status:', ordersError.response?.status);
                 // Set empty array if orders fetch fails
                 setOrders([]);
             }
+
             setLoading(false);
         };
 
@@ -229,6 +244,136 @@ const Account = () => {
         }
     };
 
+    // Change Password Functions
+    const handleChangePasswordClick = () => {
+        setShowChangePassword(true);
+        setPasswordFormData({
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        });
+        setPasswordErrors({});
+        setPasswordSuccess(false);
+    };
+
+    const handleCancelChangePassword = () => {
+        setShowChangePassword(false);
+        setPasswordFormData({
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        });
+        setPasswordErrors({});
+        setPasswordSuccess(false);
+    };
+
+    const handlePasswordInputChange = (e) => {
+        const { name, value } = e.target;
+        setPasswordFormData({
+            ...passwordFormData,
+            [name]: value
+        });
+        
+        // Clear error for this field when user starts typing
+        if (passwordErrors[name]) {
+            setPasswordErrors({
+                ...passwordErrors,
+                [name]: ''
+            });
+        }
+    };
+
+    const validatePasswordForm = () => {
+        const errors = {};
+        
+        if (!passwordFormData.currentPassword?.trim()) {
+            errors.currentPassword = 'Current password is required';
+        }
+        
+        if (!passwordFormData.newPassword?.trim()) {
+            errors.newPassword = 'New password is required';
+        } else if (passwordFormData.newPassword.length < 6) {
+            errors.newPassword = 'New password must be at least 6 characters';
+        }
+        
+        if (!passwordFormData.confirmPassword?.trim()) {
+            errors.confirmPassword = 'Please confirm your new password';
+        } else if (passwordFormData.newPassword !== passwordFormData.confirmPassword) {
+            errors.confirmPassword = 'Passwords do not match';
+        }
+        
+        if (passwordFormData.currentPassword === passwordFormData.newPassword) {
+            errors.newPassword = 'New password must be different from current password';
+        }
+        
+        setPasswordErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleChangePasswordSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validatePasswordForm()) return;
+
+        try {
+            setPasswordLoading(true);
+            setPasswordErrors({});
+            
+            const passwordData = {
+                currentPassword: passwordFormData.currentPassword,
+                newPassword: passwordFormData.newPassword
+            };
+            
+            console.log('Sending change password request');
+            
+            // Send PUT request to change password
+            const response = await axios.put(`${url}/api/user/change-password`, passwordData, {
+                headers: { 
+                    token,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            console.log('Change password response:', response.data);
+
+            if (response.data.success) {
+                setPasswordSuccess(true);
+                setPasswordFormData({
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                });
+                
+                // Hide success message and form after 3 seconds
+                setTimeout(() => {
+                    setPasswordSuccess(false);
+                    setShowChangePassword(false);
+                }, 3000);
+                
+                console.log('Password changed successfully');
+            } else {
+                throw new Error(response.data.message || 'Failed to change password');
+            }
+            
+        } catch (error) {
+            console.error('Error changing password:', error);
+            
+            let errorMessage = 'Failed to change password. Please try again.';
+            
+            if (error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.response?.status === 400) {
+                errorMessage = 'Current password is incorrect or invalid data provided.';
+            } else if (error.response?.status === 401) {
+                errorMessage = 'Authentication failed. Please log in again.';
+            }
+            
+            setPasswordErrors({ submit: errorMessage });
+        } finally {
+            setPasswordLoading(false);
+        }
+    };
+
     if (loading) {
         return <div className="loading">Loading account information...</div>;
     }
@@ -281,6 +426,15 @@ const Account = () => {
                 handleSubmit={handleSubmit}
                 handleCancelEdit={handleCancelEdit}
                 handleEditClick={handleEditClick}
+                showChangePassword={showChangePassword}
+                passwordFormData={passwordFormData}
+                passwordErrors={passwordErrors}
+                passwordLoading={passwordLoading}
+                passwordSuccess={passwordSuccess}
+                handleChangePasswordClick={handleChangePasswordClick}
+                handleCancelChangePassword={handleCancelChangePassword}
+                handlePasswordInputChange={handlePasswordInputChange}
+                handleChangePasswordSubmit={handleChangePasswordSubmit}
             />
             
             <OrderHistory

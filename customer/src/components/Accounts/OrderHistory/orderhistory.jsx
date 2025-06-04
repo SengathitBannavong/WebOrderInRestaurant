@@ -1,3 +1,4 @@
+import './orderhistory.css';
 import React from 'react';
 import { Card, Button, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -9,116 +10,78 @@ const OrderHistory = ({ orders, selectedOrder, setSelectedOrder }) => {
         navigate('/'); // Chuyển về homepage
     };
 
-    const toggleOrderDetails = (orderId) => {
-        setSelectedOrder(selectedOrder === orderId ? null : orderId);
-    };
-
-    const getStatusBadgeClass = (status) => {
-        switch (status?.toLowerCase()) {
-            case 'completed':
-                return 'status-completed';
-            case 'pending':
-                return 'status-pending';
-            case 'processing':
-                return 'status-processing';
-            case 'cancelled':
-                return 'status-cancelled';
-            default:
-                return 'status-pending';
-        }
-    };
-
     return (
         <Card className="order-history">
-            <Card.Header>
-                <h4>Order History</h4>
-                <span className="text-muted">
-                    {orders.length} {orders.length === 1 ? 'order' : 'orders'}
-                </span>
-            </Card.Header>
+            <Card.Header>Order History</Card.Header>
             <Card.Body>
-                {orders.length === 0 ? (
-                    <div className="no-orders">
-                        <i className="fas fa-shopping-cart" style={{ fontSize: '3rem', color: '#ddd', marginBottom: '1rem' }}></i>
-                        <p>You haven't placed any orders yet.</p>
-                        <Button 
-                            variant="primary" 
-                            onClick={handleStartOrdering}
-                            className="btn-primary"
+            {orders.length === 0 ? (
+                <div className="no-orders">
+                    <p>You haven't placed any orders yet.</p>
+                    <Button 
+                        variant="primary" 
+                        onClick={handleStartOrdering}
+                    >
+                        Start Ordering
+                    </Button>
+                </div>
+            ) : (
+                <ListGroup variant="flush">
+                {orders.map((order) => (
+                    <ListGroup.Item key={order.id} className="order-item">
+                        <div className="order-main-container">
+                        <div className="order-summary">
+                            <div className="order-header">
+                            <h6 className="order-id">Order <span className="order-number">#{order.orderId || order.id}</span></h6>
+                            <span className={`order-status status-${order.status?.toLowerCase() || 'pending'}`}>
+                                {order.status || 'Pending'}
+                            </span>
+                            </div>
+                            <div className="order-meta">
+                            <span className="order-date">
+                                <i className="fa fa-calendar-alt"></i> {order.date || new Date(order.createdAt).toLocaleDateString()}
+                            </span>
+                            <span className="order-price">
+                                <i className="fa fa-dollar-sign"></i> ${(order.total || order.amount || 0).toFixed(2)}
+                            </span>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline-secondary"
+                            className="details-toggle"
+                            onClick={() => setSelectedOrder(order === selectedOrder ? null : order)}
                         >
-                            Start Ordering
+                            {order === selectedOrder ? 'Hide Details' : 'View Details'}
                         </Button>
-                    </div>
-                ) : (
-                    <ListGroup variant="flush">
-                        {orders.map((order) => (
-                            <ListGroup.Item key={order.id} className="order-item">
-                                <div className="order-main-container">
-                                    <div className="order-summary">
-                                        <div className="order-header">
-                                            <h6 className="order-id">
-                                                Order <span className="order-number">#{order.orderId || order.id}</span>
-                                            </h6>
-                                            <span className={`order-status ${getStatusBadgeClass(order.status)}`}>
-                                                {order.status}
-                                            </span>
-                                        </div>
-                                        <div className="order-meta">
-                                            <div className="order-date">
-                                                <i className="fas fa-calendar-alt"></i>
-                                                <span>{order.date}</span>
-                                            </div>
-                                            <div className="order-price">
-                                                <i className="fas fa-dollar-sign"></i>
-                                                <span>${order.total?.toFixed(2) || '0.00'}</span>
-                                            </div>
-                                        </div>
+                        </div>
+                        {order === selectedOrder && (
+                        <div className="order-details mt-3">
+                            <h6 className="items-header">Items</h6>
+                            <div className="items-container">
+                            {order.items && order.items.length > 0 ? (
+                                order.items.map((item, idx) => (
+                                    <div key={idx} className="item-row">
+                                    <div className="item-info">
+                                        <span className="item-name">{item.name || 'Unknown Item'}</span>
+                                        <span className="item-quantity">× {item.quantity || 1}</span>
                                     </div>
-                                    <Button
-                                        variant="outline-secondary"
-                                        size="sm"
-                                        className="details-toggle"
-                                        onClick={() => toggleOrderDetails(order.id)}
-                                    >
-                                        {selectedOrder === order.id ? 'Hide Details' : 'View Details'}
-                                    </Button>
+                                    <span className="item-price">${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="item-row">
+                                    <span className="text-muted">No items found</span>
                                 </div>
-
-                                {selectedOrder === order.id && (
-                                    <div className="order-details">
-                                        <div className="items-header">
-                                            <strong>Order Items</strong>
-                                        </div>
-                                        <div className="items-container">
-                                            {order.items && order.items.length > 0 ? (
-                                                order.items.map((item, index) => (
-                                                    <div key={index} className="item-row">
-                                                        <div className="item-info">
-                                                            <span className="item-name">{item.name}</span>
-                                                            <span className="item-quantity">x{item.quantity}</span>
-                                                        </div>
-                                                        <span className="item-price">
-                                                            ${(item.price * item.quantity).toFixed(2)}
-                                                        </span>
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div className="item-row">
-                                                    <span className="text-muted">No items found</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="order-total-row">
-                                            <span>Total:</span>
-                                            <span className="total-amount">
-                                                ${order.total?.toFixed(2) || '0.00'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
+                            )}
+                            </div>
+                            <div className="order-total-row">
+                            <span>Total:</span>
+                            <span className="total-amount">${(order.total || order.amount || 0).toFixed(2)}</span>
+                            </div>
+                        </div>
+                        )}
+                    </ListGroup.Item>
+                    ))}
+                </ListGroup>
                 )}
             </Card.Body>
         </Card>

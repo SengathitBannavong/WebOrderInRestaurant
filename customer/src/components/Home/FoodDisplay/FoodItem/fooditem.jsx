@@ -49,6 +49,17 @@ const FoodItem = ({ id, name, price, description, image }) => {
   // Gửi feedback mới
   const handleAddFeedback = async () => {
     if(token){
+
+      const { data } = await axios.get(`${url}/api/user/profile`, {
+        headers: { token },
+      });
+      let userName;
+      if (data.success && data.user) {
+        userName = data.user.name || 'Khách hàng';
+      }else{
+        userName = 'Khách hàng';
+      }
+
       try {
         const response = await fetch(`${url}/api/feedback`, {
           method: 'POST',
@@ -56,6 +67,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            ten_user: userName,
             ten_mon: name,
             sao: Number(newFeedback.rating),
             nhan_xet: newFeedback.comment,

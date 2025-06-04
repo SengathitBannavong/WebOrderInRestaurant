@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt"; // THÊM IMPORT CHO BCRYPT
 import express from "express";
-import { getUserProfile, loginUser, registerUser } from "../controllers/userController.js";
+import { loginUser, registerUser, getUserProfile } from "../controllers/userController.js";
 import authMiddleware from "../middleware/auth.js";
 import userModel from "../model/userModel.js";
+import bcrypt from "bcrypt"; // THÊM IMPORT CHO BCRYPT
 
 const userRouter = express.Router();
 

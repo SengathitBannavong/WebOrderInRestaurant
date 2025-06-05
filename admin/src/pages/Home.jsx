@@ -1,10 +1,9 @@
-import React from 'react';
 import DashBoard from '../components/DashBoard/dashboard.jsx';
 
-const Home = () => {
+const Home = ({url}) => {
     return (
         <div className='add'>
-            <DashBoard />
+            <DashBoard url={url} />
         </div>
     );
 };

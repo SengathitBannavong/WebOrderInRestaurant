@@ -15,7 +15,7 @@ const CartDetail = ({ discount = 0, deliveryFee }) => {
                 <b>${subtotal.toFixed(2)}</b>
             </div>
             <div className="cart-total-details">
-                <b>Delivery Fee</b>
+                <b>Service Fee</b>
                 <b>${fee.toFixed(2)}</b>
             </div>
             {/* Only show discount if > 0 */}

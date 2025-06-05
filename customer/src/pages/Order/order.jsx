@@ -274,7 +274,7 @@ const Order = () => {
                             ))}
                         </ul>
                         <p>Subtotal: ${subtotal.toFixed(2)}</p>
-                        <p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
+                        <p>Service Fee: ${deliveryFee.toFixed(2)}</p>
                         {discount > 0 && <p>Discount: -${discount.toFixed(2)}</p>}
                         <p><b>Total: ${total.toFixed(2)}</b></p>
                         <p>Payment: {paymentMethod}</p>

@@ -82,7 +82,7 @@ const historyOrders = async (req, res) => {
 const activeOrders = async (req, res) => {
     try {
         const orders = await orderModel.find({ 
-            status: { $in: ["Confirm", "Cooking", "Eating"] }
+            status: { $in: ["confirm", "cooking", "eating"] }
         });
         res.json({ success: true, data: orders });
     } catch (error) {
@@ -91,5 +91,92 @@ const activeOrders = async (req, res) => {
     }
 };
 
-export { activeOrders, getAllOrders, historyOrders, placeOrder, removeOrderById, userOrders };
+const fetchOrderAdmin = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ 
+            status: { $in: ["pending" ,"confirm", "cooking", "eating"] }
+        });
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error retrieving admin orders" });
+    }
+}
+
+const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, status } = req.body;
+        if (!orderId || !status) {
+            return res.status(400).json({ success: false, message: "Order ID and status are required" });
+        }
+        const updatedOrder = await orderModel.findByIdAndUpdate(orderId, { status }, { new: true });
+        if(status === "done") {
+            updatedOrder.payment = true;
+            updatedOrder.save();
+        }
+        if (!updatedOrder) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+        res.json({ success: true, data: updatedOrder });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error updating order status" });
+    }
+};
+
+const statisticsDashboard = async (req, res) => {
+    try {
+        const totalOrdersPromise = orderModel.countDocuments({});
+        const totalRevenuePromise = orderModel.aggregate([
+        { $match: { status: "done" } },
+        {
+            $group: {
+            _id: null,
+            totalRevenue: { $sum: "$amount" }
+            }
+        }
+        ]);
+
+        const pendingOrdersPromise = orderModel.countDocuments({ status: "pending" });
+        const dineInOrdersPromise = orderModel.countDocuments({ "address.status": "dining" });
+        const takeAwayOrdersPromise = orderModel.countDocuments({ "address.status": "take away" });
+        const doneOrdersPromise = orderModel.countDocuments({ status: "done" });
+
+        const [
+            totalOrders,
+            revenueAggResult,
+            pendingOrders,
+            dineInOrders,
+            takeAwayOrders,
+            doneOrders
+        ] = await Promise.all([
+            totalOrdersPromise,
+            totalRevenuePromise,
+            pendingOrdersPromise,
+            dineInOrdersPromise,
+            takeAwayOrdersPromise,
+            doneOrdersPromise
+        ]);
+
+        const totalRevenue =
+        Array.isArray(revenueAggResult) && revenueAggResult.length > 0
+            ? revenueAggResult[0].totalRevenue
+            : 0;
+
+        return res.json({
+            success: true,
+            totalOrders,
+            totalRevenue,
+            pendingOrders,
+            dineInOrders,
+            takeAwayOrders,
+            doneOrders
+        });
+    } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+}
+
+export { activeOrders, fetchOrderAdmin, getAllOrders, historyOrders, placeOrder, removeOrderById, statisticsDashboard, updateOrderStatus, userOrders };
 

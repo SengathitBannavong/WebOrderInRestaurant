@@ -37,7 +37,7 @@ const TableManage = ({ url }) => {
                 const ordersByTable = {};
                 response.data.data.forEach(order => {
                     if (order.address && order.address.table && 
-                        (order.status === 'Cooking' || order.status === 'Eating')) {
+                        (order.status === 'cooking' || order.status === 'eating' || order.status === 'confirm')) {
                         const tableId = order.address.table;
                         if (!ordersByTable[tableId]) {
                             ordersByTable[tableId] = [];

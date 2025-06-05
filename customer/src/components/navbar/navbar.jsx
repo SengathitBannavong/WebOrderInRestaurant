@@ -1,9 +1,8 @@
-import "./navbar.css";
-import React, {useContext, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { assets } from "../../assets/assets.js";
-import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../../context/StoreContext.jsx";
+import "./navbar.css";
 
 const Navbar = ({setShowLogin}) => {
     const navigate = useNavigate();
@@ -40,11 +39,6 @@ const Navbar = ({setShowLogin}) => {
                 </a>
             </ul>
             <div className="navbar-right">
-                <div className="navbar-search-icon">
-                    <Link to="/">
-                        <img src={assets.search_icon} alt="search-icon" className="navbar-search-icon" />
-                    </Link>
-                </div>
                 <div className="narbar-basket-icon" style={{ position : "relative" }}>
                     <Link to="/cart">
                         <img src={assets.basket_icon} alt="" />

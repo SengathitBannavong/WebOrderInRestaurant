@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
+import OrderQueue from '/OrderList/OrderQueue';
+
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -51,6 +53,7 @@ const Dashboard = () => {
                     <h2>Recent Activity</h2>
                     <p>No recent activities to display</p>
                 </div>
+                <OrderQueue /> 
             </div>
         </div>
     );

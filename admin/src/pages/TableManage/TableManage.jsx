@@ -353,6 +353,7 @@ const TableManage = ({ url }) => {
                             <button 
                                 className="close-popup"
                                 onClick={() => setShowOrderPopup(false)}
+                                aria-label="Close popup"
                             >
                                 ×
                             </button>
@@ -361,25 +362,57 @@ const TableManage = ({ url }) => {
                             {selectedTableOrders.map((order, index) => (
                                 <div key={index} className="order-item">
                                     <div className="order-header">
-                                        <span className="order-id">Order #{order._id}</span>
-                                        <span className={`order-status ${order.status.toLowerCase()}`}>
+                                        <div className="order-id-container">
+                                            <span className="order-id">Order #{index+1}</span>
+                                        </div>
+                                        <span className={`order-status ${order.status?.toLowerCase()}`}>
                                             {order.status}
                                         </span>
                                     </div>
                                     <div className="order-details">
                                         <div className="order-items">
-                                            <strong>Items:</strong>
-                                            <ul>
-                                                {order.items.map((item, idx) => (
-                                                    <li key={idx}>
-                                                        {item.name} x {item.quantity} 
-                                                        (${item.price})
-                                                    </li>
+                                            <div className="items-header">
+                                                <span>Item</span>
+                                                <span>Qty</span>
+                                                <span>Price</span>
+                                            </div>
+                                            <div className="items-list">
+                                                {order.items && order.items.map((item, idx) => (
+                                                    <div key={idx} className="item-row">
+                                                        <span className="item-name">{item.name || 'Unknown item'}</span>
+                                                        <span className="item-quantity">×{item.quantity || 1}</span>
+                                                        <span className="item-price">${item.price?.toFixed(2) || '0.00'}</span>
+                                                    </div>
                                                 ))}
-                                            </ul>
+                                            </div>
                                         </div>
-                                        <div className="order-total">
-                                            <strong>Total:</strong> ${order.amount}
+                                        <div className="order-summary">
+                                            <div className="summary-row">
+                                                <span>Subtotal:</span>
+                                                <span>${order.amount?.toFixed(2) || '0.00'}</span>
+                                            </div>
+                                            {order.discount > 0 && (
+                                                <div className="summary-row discount">
+                                                    <span>Discount:</span>
+                                                    <span>-${order.discount.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            {order.deliveryFee > 0 && (
+                                                <div className="summary-row">
+                                                    <span>Service fee:</span>
+                                                    <span>${order.deliveryFee.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            <div className="summary-row total">
+                                                <span>Total:</span>
+                                                <span>${order.amount?.toFixed(2) || '0.00'}</span>
+                                            </div>
+                                            <div className="payment-method">
+                                                <span className={`payment-badge ${order.payment ? 'paid' : 'unpaid'}`}>
+                                                    {order.payment ? 'Paid' : 'Unpaid'} 
+                                                    {order.payment && order.paymentMethod && ` • ${order.paymentMethod}`}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

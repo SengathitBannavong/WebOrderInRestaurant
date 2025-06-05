@@ -1,5 +1,5 @@
 import express from "express";
-import { activeOrders, getAllOrders, historyOrders, placeOrder, removeOrderById, userOrders } from "../controllers/orderController.js";
+import { activeOrders, fetchOrderAdmin, getAllOrders, historyOrders, placeOrder, removeOrderById, statisticsDashboard, updateOrderStatus, userOrders } from "../controllers/orderController.js";
 import authMiddleware from "../middleware/auth.js";
 
 const orderRouter = express.Router();
@@ -13,4 +13,7 @@ orderRouter.get("/",authMiddleware ,userOrders); // get user orders
 orderRouter.delete("/remove/:id", removeOrderById); // delete order by id
 orderRouter.get("/history",authMiddleware,historyOrders); // get order history
 orderRouter.get("/active", activeOrders); // get active orders
+orderRouter.get("/list-admin-only",fetchOrderAdmin);
+orderRouter.put("/update-status", updateOrderStatus); // update order status
+orderRouter.get("/dashbroad-statistics-admin", statisticsDashboard);
 export default orderRouter;

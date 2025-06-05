@@ -1,10 +1,9 @@
-import React from 'react';
-import OrderList from '../components/OrderList/orderlist.jsx';
+import OrderQueue from '../components/OrderList/orderqueue.jsx';
 
-const Orders = () => {
+const Orders = ({url}) => {
     return (
         <div className='add'>
-            <OrderList />
+            <OrderQueue url={url} />
         </div>
     );
 };

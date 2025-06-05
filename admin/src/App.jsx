@@ -26,10 +26,10 @@ function App() {
         <div className='app-content'>
           <Sidebar/>
             <Routes>
-              <Route path='/' element = {<Home/>} />
+              <Route path='/' element = {<Home url={url}/>} />
               <Route path='/addfood' element = {<AddFood url={url}/>} />
               <Route path='/list' element = {<ListFood url={url}/>} />
-              <Route path='/orders' element = {<Orders/>} />
+              <Route path='/orders' element = {<Orders url={url}/>} />
               <Route path='/feedback' element = {<Feedback url={url}/>} />
               <Route path='/promocode' element={<PromoCodeAdmin url={url} />} />
               <Route path='/feedback-dashboard' element={<Dashboard_Feedback url={url} />} />

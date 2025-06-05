@@ -79,5 +79,17 @@ const historyOrders = async (req, res) => {
     }
 };
 
-export { getAllOrders, historyOrders, placeOrder, removeOrderById, userOrders };
+const activeOrders = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ 
+            status: { $in: ["Confirm", "Cooking", "Eating"] }
+        });
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error retrieving active orders" });
+    }
+};
+
+export { activeOrders, getAllOrders, historyOrders, placeOrder, removeOrderById, userOrders };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
-import OrderQueue from '/OrderList/OrderQueue';
+import OrderQueue from '../OrderList/orderqueue.jsx'; // Adjust the import path as necessary
 
 
 const Dashboard = () => {

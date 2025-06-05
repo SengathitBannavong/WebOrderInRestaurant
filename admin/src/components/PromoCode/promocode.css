@@ -1,5 +1,4 @@
 .promo-admin {
-    max-width: 600px;
     margin: 40px auto;
     background: #fff;
     border-radius: 10px;
@@ -72,4 +71,200 @@
 }
 .promo-list button:hover {
     background: #b71c1c;
+}
+
+/* Promo List Styling */
+.promo-list {
+    margin-top: 24px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+}
+
+.promo-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.promo-list h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.promo-sort {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Empty State */
+.promo-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #777;
+}
+
+.empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.promo-empty-state p {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.promo-empty-state small {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Promo Grid */
+.promo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+/* Promo Cards */
+.promo-card {
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.promo-card-header {
+    padding: 12px 16px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.promo-code {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #333;
+}
+
+.promo-status {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.promo-status.active {
+    background-color: #e7f5ea;
+    color: #2e7d32;
+}
+
+.promo-status.inactive {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.promo-card-body {
+    padding: 16px;
+}
+
+.promo-discount {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.discount-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+.discount-label {
+    font-size: 14px;
+    color: #777;
+    margin-left: 4px;
+}
+
+.promo-usage {
+    margin-top: 12px;
+}
+
+.usage-bar {
+    height: 8px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.usage-progress {
+    height: 100%;
+    background-color: #4a90e2;
+    border-radius: 4px;
+}
+
+.usage-text {
+    font-size: 12px;
+    color: #777;
+    text-align: right;
+}
+
+.promo-card-footer {
+    padding: 12px 16px;
+    background-color: #fafafa;
+    border-top: 1px solid #eaeaea;
+    display: flex;
+    justify-content: space-between;
+}
+
+.promo-card-footer button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-btn {
+    background-color: white;
+    border: 1px solid #f0f0f0 !important;
+    color: #e53935;
+}
+
+.delete-btn:hover {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .promo-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .promo-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .promo-sort {
+        width: 100%;
+    }
 }

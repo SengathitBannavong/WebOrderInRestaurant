@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { useContext, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import CartDetail from '../../components/Cart/Cart_Detail';
 import { StoreContext } from '../../context/StoreContext.jsx';
 import './order.css';
-import axios from 'axios';
 
 const Order = () => {
     const { table, food_list, cartItems, getTotalCartAmount, clearCart, url, token } = useContext(StoreContext);
@@ -25,17 +25,17 @@ const Order = () => {
             return;
         }
         try {
-            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            const res = await axios.get(`${url}/api/promo/code/${code}/validate`);
             if (res.data.success && res.data.data) {
                 setDiscount(res.data.data.discount);
                 setPromoError('');
             } else {
                 setDiscount(0);
-                setPromoError('Invalid promo code');
+                setPromoError('Invalid promo code or full capacity');
             }
         } catch (err) {
             setDiscount(0);
-            setPromoError('Invalid promo code');
+            setPromoError(res.data.message || 'Invalid promo code');
         }
     };
 
@@ -66,7 +66,7 @@ const Order = () => {
         const code = promoCode.trim().toLowerCase();
         if (!code) return 0;
         try {
-            const res = await axios.get(`${url}/api/promo/validate?code=${code}`);
+            const res = await axios.get(`${url}/api/promo/code/${code}/validate`);
             if (res.data.success && res.data.data) {
                 return res.data.data.discount;
             }
@@ -90,6 +90,12 @@ const Order = () => {
             validatedDiscount = await validatePromoBeforeOrder();
             if (validatedDiscount === 0) {
                 toast.error("Promo code is invalid or expired");
+                setLoading(false);
+                return;
+            }
+            const res = await axios.put(`${url}/api/promo/code/${promoCode}/used`);
+            if(!res.data.success) {
+                toast.error(res.data.message || "Failed to apply promo code");
                 setLoading(false);
                 return;
             }
@@ -117,7 +123,7 @@ const Order = () => {
         }
 
         let orderData = {
-            userId: token,
+            userId: "",
             address: data_address,
             items: orderItems,
             amount: Math.max(0, subtotal + deliveryFee - validatedDiscount),
@@ -127,19 +133,25 @@ const Order = () => {
             deliveryFee,
         }
 
-        try {
-            const response = await axios.post(`${url}/api/order/place`, orderData);
-            if (response.data.success) {
-                toast.success("Order placed successfully!");
-                clearCart();
-                setShowReview(false);
-                navigate('/myorders');
-            } else {
-                toast.error(response.data.message || "Failed to place order");
+        if(token){
+            try {
+                const response = await axios.post(`${url}/api/order/place`, orderData, {headers: {token: token}});
+                if (response.data.success) {
+                    toast.success("Order placed successfully!");
+                    clearCart();
+                    setShowReview(false);
+                    navigate('/myorders');
+                } else {
+                    toast.error(response.data.message || "Failed to place order");
+                }
+            } catch (err) {
+                toast.error("Error placing order");
+            } finally {
+                setLoading(false);
             }
-        } catch (err) {
-            toast.error("Error placing order");
-        } finally {
+        }
+        else {
+            toast.error("Please login to place an order");
             setLoading(false);
         }
     };

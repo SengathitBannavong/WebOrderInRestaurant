@@ -22,6 +22,10 @@ return (
                 <img src={assets.add_icon} alt="" />
                 <p>Promo Codes</p>
             </NavLink>
+            <NavLink to='/feedback-dashboard' className="sidebar-option">
+                <img src={assets.order_icon} alt="" />
+                <p>Feedback</p>
+            </NavLink>
         </div>
     </div>
     )

@@ -20,18 +20,41 @@ import {
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-    const url  = "http://localhost:4000";
+    // ✅ Backend URL from config
+    const url = "http://localhost:4000";
+    
+    // ✅ State management with real token
     const [food_list, setFoodList] = useState([]); 
     const [cartItems, setCartItems] = useState({});
-    const id = "680b3f65275b19c8f712d432"; // Dummy id, replace with actual user id
     const [table, setTable] = useState({}); 
-    const [token, setToken] = useState(id); // Dummy id, replace with actual user id // Token should encrypt by JWT
+    const [token, setToken] = useState("");
+    const [user, setUser] = useState(null);
+
+    const updateToken = (newToken) => {
+        setToken(newToken);
+        if (newToken) {
+            localStorage.setItem("token", newToken);
+        } else {
+            localStorage.removeItem("token");
+            setUser(null);
+            setCartItems({});
+        }
+    };
 
     useEffect(() => {
         async function loadData() {
+            // ✅ Load food list
             const food_list = await fetchFoodList(url);
             if (food_list) {
                 setFoodList(food_list);
+            }
+
+            // ✅ Check token in localStorage
+            const savedToken = localStorage.getItem("token");
+            if (savedToken) {
+                setToken(savedToken);
+            }else{
+                console.log("No token found, please login");
             }
 
             const savedCartItems = localStorage.getItem("cartItems");
@@ -47,10 +70,11 @@ const StoreContextProvider = (props) => {
             const table_list = await fetchTableList(url);
             if (table_list) {
                 setTable(table_list);
-            }else {
+            } else {
                 console.log("Error fetching table list");
             }
         }
+
         loadTable();
         loadData();
     }, []);
@@ -62,16 +86,19 @@ const StoreContextProvider = (props) => {
         cartItems,
         table,
         token,
+        user, // ✅ Add user data
 
-        // Fuctions
+        // Functions
         addToCart: (id) => addToCart(cartItems, setCartItems, id),
         removeFromCart: (id) => removeFromCart(cartItems, setCartItems, id),
         clearCart: () => clearCart(setCartItems),
         getTotalCartAmount: () => getTotalCartAmount(cartItems, food_list),
         fetchOrders: () => fetchOrders(url),
-        setToken: (token) => setToken(token),
-        fetchOrderById: (id) => fetchOrderById(url, id),
+        setToken: updateToken,
+        fetchOrderById: (token) => fetchOrderById(url, token),
         removeOrderById: (id) => removeOrderById(url, id),
+        loadUserData: () => loadUserData(token),
+        loadCartData: () => loadCartData(token),
     }
     
     return (

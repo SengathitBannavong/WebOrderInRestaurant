@@ -6,3 +6,4 @@ start cmd /k "cd customer && npm run dev"
 
 echo start Admin...
 start cmd /k "cd admin && npm run dev"
+

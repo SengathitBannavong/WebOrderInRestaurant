@@ -27,7 +27,7 @@ const OrderQueue = () => {
                 };
 
                 data.forEach(order => {
-                    const status = order.status || 'Pending';
+                    const status = order.status || 'pending';
                     if (categorized[status]) {
                         categorized[status].push(order);
                     }

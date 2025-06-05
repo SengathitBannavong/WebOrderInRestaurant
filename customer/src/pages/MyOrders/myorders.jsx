@@ -106,7 +106,7 @@ const MyOrders = () => {
                                     <p>Items: {order.items ? order.items.length : 0}</p>
                                     <p><span>&#x25cf;</span><b>{order.status || 'Unknown'}</b></p>
                                     {
-                                        order.status === "Pending"
+                                        order.status === "pending"
                                         ? (
                                             <button onClick={() => showCancelConfirmation(order._id)}>
                                                 Cancel Order

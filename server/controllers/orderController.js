@@ -82,7 +82,7 @@ const historyOrders = async (req, res) => {
 const activeOrders = async (req, res) => {
     try {
         const orders = await orderModel.find({ 
-            status: { $in: ["Confirm", "Cooking", "Eating"] }
+            status: { $in: ["confirm", "cooking", "eating"] }
         });
         res.json({ success: true, data: orders });
     } catch (error) {

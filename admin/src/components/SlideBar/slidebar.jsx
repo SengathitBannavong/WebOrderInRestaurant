@@ -26,6 +26,10 @@ return (
                 <img src={assets.order_icon} alt="" />
                 <p>Feedback</p>
             </NavLink>
+            <NavLink to='/table-manage' className="sidebar-option">
+                <img src={assets.table_icon} alt="" className="table-icon"/>
+                <p>Table</p>
+            </NavLink>
         </div>
     </div>
     )

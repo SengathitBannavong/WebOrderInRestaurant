@@ -27,9 +27,14 @@
     border-color: tomato;
 } 
 
+.table-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
 @media (max-width:900px) {
     .sidebar-option p{
         display: none;
     }
-    
 }
